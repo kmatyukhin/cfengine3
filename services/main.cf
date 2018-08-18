@@ -16,6 +16,7 @@ bundle agent main
       "packages"   usebundle => additional_packages;
       "sysctl"     usebundle => edit_sysctl;
       "udisks2"    usebundle => udisks2_rules;
+      "vcs_update" usebundle => vcs_update;
     raspberrypi::
       "eth0_alias" usebundle => eth0_alias;
       "ipv6"       usebundle => enable_ipv6;
@@ -130,4 +131,18 @@ bundle agent devmon_setup
         package_policy => "addupdate",
         package_method => apt,
         classes => if_ok("devmon_installed");
+}
+
+bundle agent vcs_update
+{
+  commands:
+    policy_server::
+      "/usr/bin/git"
+        args => "pull --ff-only origin master",
+        contain => masterfiles_contain;
+}
+
+body contain masterfiles_contain
+{
+  chdir => "$(sys.masterdir)";
 }
