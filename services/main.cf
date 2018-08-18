@@ -145,4 +145,5 @@ bundle agent vcs_update
 body contain masterfiles_contain
 {
   chdir => "$(sys.masterdir)";
+  no_output => "true";
 }
