@@ -1,5 +1,9 @@
 {
-  "classes": {
-               "services_autorun": [ "any" ]
-             }
+    "classes": {
+        "services_autorun": [ "any" ]
+    },
+
+    "vars": {
+        "acl": [ "192.168.1.100/24", "2a01:c50e:3620:8300:.*" ]
+    }
 }

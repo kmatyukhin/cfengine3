@@ -100,7 +100,6 @@ bundle common def
                    #  "2001:700:700:3.*",
                    #  "217.77.34.18",
                    #  "217.77.34.19",
-                   "2a01:c50e:3620:8300:.*",
         },
         comment => "Define an acl for the machines to be granted accesses",
         handle => "common_def_vars_acl",
