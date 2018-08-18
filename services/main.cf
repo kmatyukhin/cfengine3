@@ -1,0 +1,133 @@
+###############################################################################
+#
+# bundle agent main
+#  - User/Site policy entry
+#
+###############################################################################
+
+bundle agent main
+# User Defined Service Catalogue
+{
+  services:
+      "ssh" service_policy => "start";
+
+  methods:
+    any::
+      "packages"   usebundle => additional_packages;
+      "sysctl"     usebundle => edit_sysctl;
+      "udisks2"    usebundle => udisks2_rules;
+    raspberrypi::
+      "eth0_alias" usebundle => eth0_alias;
+      "ipv6"       usebundle => enable_ipv6;
+      "minidlna"   usebundle => edit_minidlna_conf;
+      "devmon"     usebundle => devmon_setup;
+}
+
+bundle agent additional_packages
+{
+  vars:
+      "pkgs" slist => {
+                        "borgbackup",
+                        "iptables-persistent",
+                        "ntfs-3g",
+                        "minidlna",
+                        "rtorrent",
+                        "udisks2",
+                      };
+
+  files:
+    any::
+      "$(sys.workdir)/modules/packages/."
+        create => "true";
+      "$(sys.workdir)/modules/packages/apt_get"
+        copy_from => perms_cp("/usr/share/cfengine3/modules/packages/apt_get");
+
+  packages:
+    any::
+      "$(pkgs)"
+        package_policy => "addupdate",
+        package_method => apt;
+}
+
+bundle agent edit_sysctl
+{
+  files:
+      "/etc/sysctl.conf"
+        create => "false",
+        edit_defaults => no_backup,
+        edit_line => uncomment_lines_matching("net.ipv4.ip_forward=1", "#");
+      "/etc/sysctl.conf"
+        create => "false",
+        edit_defaults => no_backup,
+        edit_line => uncomment_lines_matching("net.ipv6.conf.all.forwarding=1", "#");
+}
+
+bundle agent edit_minidlna_conf
+{
+  vars:
+       "minidlna_conf[inotify]" string => "yes";
+       "minidlna_conf[force_sort_criteria]" string => "+dc:title";
+       "minidlna_conf[media_dir]" string => "V,/media/EXTDISK/Videos";
+  files:
+      "/etc/minidlna.conf"
+        create => "false",
+        edit_defaults => no_backup,
+        edit_line => set_line_based("$(this.bundle).minidlna_conf", "=", "\s*=\s*", ".*", "\s*#\s*");
+}
+
+bundle agent eth0_alias
+{
+  vars:
+      "lines" string =>
+"auto eth0:1
+allow-hotplug eth0:1
+iface eth0:1 inet static
+    address 192.168.133.1
+    netmask 255.255.255.0";
+
+  files:
+      "/etc/network/interfaces.d/eth0_alias"
+        create => "true",
+        edit_defaults => no_backup,
+        edit_line => append_if_no_line("$(eth0_alias.lines)");
+}
+
+bundle agent udisks2_rules
+{
+  vars:
+      "lines" string =>
+"ENV{ID_FS_USAGE}==\"filesystem|other|crypto\", ENV{UDISKS_FILESYSTEM_SHARED}=\"1\"";
+
+  files:
+      "/etc/udev/rules.d/99-udisks2.rules"
+        create => "true",
+        edit_defaults => no_backup,
+        edit_line => append_if_no_line("$(udisks2_rules.lines)");
+}
+
+bundle agent enable_ipv6
+{
+  files:
+      "/etc/modprobe.d/ipv6.conf"
+        create => "false",
+        edit_defaults => no_backup,
+        edit_line => comment_lines_matching("alias net-pf-10 off", "#");
+}
+
+bundle agent devmon_setup
+{
+  classes:
+      "devmon_fixed"
+        if => fileexists("/usr/lib/systemd/system/devmon@.service");
+
+  files:
+    devmon_installed.!devmon_fixed::
+      "/usr/lib/systemd/system/devmon@.service"
+        copy_from => perms_cp("/usr/lib/arm-linux-gnueabihf/systemd/system/devmon@.service");
+
+  packages:
+      "udevil"
+        package_policy => "addupdate",
+        package_method => apt,
+        classes => if_ok("devmon_installed");
+}
