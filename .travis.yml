@@ -1,0 +1,16 @@
+language: generic
+
+os:
+  - linux
+
+cache:
+  - apt
+
+addons:
+  apt:
+    packages:
+      - cfengine3
+
+install: true
+
+script: /var/lib/cfengine3/bin/cf-promises -cf promises.cf
