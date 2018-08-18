@@ -32,5 +32,5 @@ bundle agent ipip6_tunnel_client
 
 body classes ipip6_tunnel_class
 {
-  promise_kept => { "ipip6_tunnel_up" };
+  promise_repaired => { "ipip6_tunnel_up" };
 }
