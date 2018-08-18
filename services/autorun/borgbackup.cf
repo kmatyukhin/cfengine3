@@ -23,6 +23,11 @@ bundle agent borgbackup_server
       "source_directory" string => "$(def.dir_files)";
       "user"             string => "borg";
 
+  packages:
+      "borgbackup"
+        package_policy => "addupdate",
+        package_method => apt;
+
   files:
     borg_user_present::
       "/home/$(user)/.ssh/$(borgbackup.clients)_borgbackup.pub"
