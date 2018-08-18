@@ -3,14 +3,14 @@ language: generic
 os:
   - linux
 
+env:
+  - CFENGINE3_VERSION=3.9.2-1
+
 cache:
   - apt
 
-addons:
-  apt:
-    packages:
-      - cfengine3
+install:
+  - wget https://cfengine-package-repos.s3.amazonaws.com/community_binaries/cfengine-community_${CFENGINE3_VERSION}_amd64.deb
+  - sudo dpkg -i cfengine-community_${CFENGINE3_VERSION}_amd64.deb
 
-install: true
-
-script: /var/lib/cfengine3/bin/cf-promises -cf promises.cf
+script: /var/lib/cfengine3/bin/cf-promises --full-check --file promises.cf
