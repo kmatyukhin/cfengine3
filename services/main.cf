@@ -139,11 +139,5 @@ bundle agent vcs_update
     policy_server::
       "/usr/bin/git"
         args => "pull --ff-only origin master",
-        contain => masterfiles_contain;
-}
-
-body contain masterfiles_contain
-{
-  chdir => "$(sys.masterdir)";
-  no_output => "true";
+        contain => silent_in_dir("$(sys.masterdir)");
 }
