@@ -20,7 +20,7 @@ bundle agent main
     raspberrypi::
       "eth0_alias" usebundle => eth0_alias;
       "ipv6"       usebundle => enable_ipv6;
-      "minidlna"   usebundle => edit_minidlna_conf;
+      "minidlna"   usebundle => minidlna_setup;
       "devmon"     usebundle => devmon_setup;
 }
 
@@ -31,7 +31,6 @@ bundle agent additional_packages
                         "git",
                         "iptables-persistent",
                         "ntfs-3g",
-                        "minidlna",
                         "rtorrent",
                         "udisks2",
                       };
@@ -63,17 +62,23 @@ bundle agent edit_sysctl
         edit_line => uncomment_lines_matching("net.ipv6.conf.all.forwarding=1", "#");
 }
 
-bundle agent edit_minidlna_conf
+bundle agent minidlna_setup
 {
   vars:
        "minidlna_conf[inotify]" string => "yes";
        "minidlna_conf[force_sort_criteria]" string => "+dc:title";
        "minidlna_conf[media_dir]" string => "V,/media/EXTDISK/Videos";
   files:
+    minidlna_installed::
       "/etc/minidlna.conf"
         create => "false",
         edit_defaults => no_backup,
         edit_line => set_line_based("$(this.bundle).minidlna_conf", "=", "\s*=\s*", ".*", "\s*#\s*");
+  packages:
+      "minidlna"
+        package_policy => "addupdate",
+        package_method => apt,
+        classes => if_ok("minidlna_installed");
 }
 
 bundle agent eth0_alias
