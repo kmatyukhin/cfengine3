@@ -33,11 +33,13 @@ bundle agent borgbackup_server
       "/home/$(user)/.ssh/$(borgbackup.clients)_borgbackup.pub"
         copy_from => remote_cp("$(source_directory)/$(borgbackup.servers)/borgbackup/$(borgbackup.clients)_borgbackup.pub", "$(source_server)"),
         edit_defaults => std_defs,
-        perms => mog("600", "$(user)", "$(user)");
+        perms => mog("600", "$(user)", "$(user)"),
+        action => if_elapsed("60");
       "/home/$(user)/.ssh/authorized_keys"
         create => "true",
         edit_line => insert_file_if_no_line_matching("$(user)", "$(source_directory)/$(borgbackup.servers)/borgbackup/$(borgbackup.clients)_borgbackup.pub"),
-        perms => mog("600", "$(user)", "$(user)");
+        perms => mog("600", "$(user)", "$(user)"),
+        action => if_elapsed("60");
 
   users:
       "$(user)"
