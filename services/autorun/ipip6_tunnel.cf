@@ -1,0 +1,36 @@
+bundle common ipip6_tunnel
+{
+  vars:
+      "server_ip6" string => '2a05:d018:76d:a000:ac79:21c4:f54b:592b';
+      "client_ip6" string => '2a01:c50e:3620:8300:33a5:828b:bad7:31c';
+      "server_ip4" string => '10.0.3.1';
+      "client_ip4" string => '10.0.3.2';
+}
+
+bundle agent ipip6_tunnel_autorun
+{
+  meta:
+      "tags" slist => { "autorun" };
+
+  methods:
+    raspberrypi::
+      "client"
+        usebundle => ipip6_tunnel_client;
+}
+
+bundle agent ipip6_tunnel_client
+{
+  commands:
+      "/bin/ping -c1 -w1"
+        args => "$(ipip6_tunnel.server_ip4)",
+        classes => ipip6_tunnel_class;
+
+  reports:
+    ipip6_tunnel_up::
+      "ipip6 tunnel is up";
+}
+
+body classes ipip6_tunnel_class
+{
+  promise_kept => { "ipip6_tunnel_up" };
+}
