@@ -23,6 +23,7 @@ bundle agent ipip6_tunnel_client
   commands:
       "/bin/ping -c1 -w1"
         args => "$(ipip6_tunnel.server_ip4)",
+        contain => silent,
         classes => ipip6_tunnel_class;
 
   reports:
