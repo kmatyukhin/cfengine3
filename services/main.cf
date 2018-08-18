@@ -28,6 +28,7 @@ bundle agent additional_packages
   vars:
       "pkgs" slist => {
                         "borgbackup",
+                        "git",
                         "iptables-persistent",
                         "ntfs-3g",
                         "minidlna",
