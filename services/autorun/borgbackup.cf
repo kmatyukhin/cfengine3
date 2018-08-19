@@ -60,7 +60,7 @@ bundle agent borgbackup_client
       "source_directory" string => "$(def.dir_files)";
 
   files:
-      "/etc/borgmatic/config.yml"
+      "/etc/borgmatic/config.yaml"
         copy_from => remote_cp("$(source_directory)/$(borgbackup.clients)/borgbackup/config.yaml", "$(source_server)"),
         edit_defaults => std_defs,
         perms => m("600");
