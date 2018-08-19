@@ -14,6 +14,9 @@ bundle agent borgbackup_autorun
       "server"
         usebundle => borgbackup_server,
         ifvarclass => "$(borgbackup.servers)";
+      "client"
+        usebundle => borgbackup_client,
+        ifvarclass => "$(borgbackup.clients)";
 }
 
 bundle agent borgbackup_server
@@ -48,6 +51,19 @@ bundle agent borgbackup_server
         shell => "/bin/bash",
         home_bundle => borgbackup_home_dir("$(this.promiser)"),
         classes => if_ok("borg_user_present");
+}
+
+bundle agent borgbackup_client
+{
+  vars:
+      "source_server"    string => "$(sys.policy_hub)";
+      "source_directory" string => "$(def.dir_files)";
+
+  files:
+      "/etc/borgmatic/config.yml"
+        copy_from => remote_cp("$(source_directory)/$(borgbackup.clients)/borgbackup/config.yml", "$(source_server)"),
+        edit_defaults => std_defs,
+        perms => m("600");
 }
 
 bundle agent borgbackup_home_dir(user)
