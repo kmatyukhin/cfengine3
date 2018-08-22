@@ -28,8 +28,7 @@ bundle agent borgbackup_server
 
   packages:
       "borgbackup"
-        package_policy => "addupdate",
-        package_method => apt;
+        package_policy => "addupdate";
 
   files:
     borg_user_present::

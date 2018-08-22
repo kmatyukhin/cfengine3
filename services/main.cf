@@ -45,8 +45,7 @@ bundle agent additional_packages
   packages:
     any::
       "$(pkgs)"
-        package_policy => "addupdate",
-        package_method => apt;
+        package_policy => "addupdate";
 }
 
 bundle agent edit_sysctl
@@ -77,7 +76,6 @@ bundle agent minidlna_setup
   packages:
       "minidlna"
         package_policy => "addupdate",
-        package_method => apt,
         classes => if_ok("minidlna_installed");
 }
 
@@ -134,7 +132,6 @@ bundle agent devmon_setup
   packages:
       "udevil"
         package_policy => "addupdate",
-        package_method => apt,
         classes => if_ok("devmon_installed");
 }
 
