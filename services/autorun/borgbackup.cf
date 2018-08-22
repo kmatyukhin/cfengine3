@@ -35,11 +35,12 @@ bundle agent borgbackup_server
     borg_user_present::
       "/home/$(user)/.ssh/$(borgbackup.clients)_borgbackup.pub"
         copy_from => remote_cp("$(source_directory)/$(borgbackup.servers)/borgbackup/$(borgbackup.clients)_borgbackup.pub", "$(source_server)"),
-        edit_defaults => std_defs,
+        edit_defaults => empty,
         perms => mog("600", "$(user)", "$(user)"),
         action => if_elapsed("60");
       "/home/$(user)/.ssh/authorized_keys"
         create => "true",
+        edit_defaults => empty,
         edit_line => insert_file_if_no_line_matching("$(user)", "$(source_directory)/$(borgbackup.servers)/borgbackup/$(borgbackup.clients)_borgbackup.pub"),
         perms => mog("600", "$(user)", "$(user)"),
         action => if_elapsed("60");
@@ -81,7 +82,7 @@ bundle edit_line insert_file_if_no_line_matching(user, file)
 {
   classes:
       "have_user"
-        expression => regline(".*$(user).*", "$(this.promiser)");
+        expression => regline("^.*$(user).*$", "$(this.promiser)");
 
   insert_lines:
     !have_user::
