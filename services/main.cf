@@ -17,6 +17,7 @@ bundle agent main
       "sysctl"     usebundle => edit_sysctl;
       "udisks2"    usebundle => udisks2_rules;
       "vcs_update" usebundle => vcs_update;
+      "ssh"        usebundle => ssh_setup;
     raspberrypi::
       "eth0_alias" usebundle => eth0_alias;
       "ipv6"       usebundle => enable_ipv6;
@@ -142,4 +143,30 @@ bundle agent vcs_update
       "/usr/bin/git"
         args => "pull --ff-only origin master",
         contain => silent_in_dir("$(sys.masterdir)");
+}
+
+bundle agent ssh_setup
+{
+  vars:
+      "source_server"      string => "$(sys.policy_hub)";
+      "source_directory"   string => "$(def.dir_files)";
+
+      "users[raspberrypi]" slist => { "pi" };
+      "users[air]"         slist => { "kv" };
+
+      "ssh_server"         slist => getindices("users");
+
+ files:
+      "/home/$(users[$(ssh_server)])/.ssh"
+        copy_from => remote_cp("$(source_directory)/$(ssh_server)/ssh", "$(source_server)"),
+        file_select => pub_key_files,
+        perms => mog("600", "$(users[$(ssh_server)])", "$(users[$(ssh_server)])"),
+        depth_search => recurse("inf"),
+        ifvarclass => "$(ssh_server)";
+}
+
+body file_select pub_key_files
+{
+      leaf_name => { ".*\.pub" };
+      file_result => "leaf_name";
 }
