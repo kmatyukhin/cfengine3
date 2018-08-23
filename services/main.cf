@@ -169,7 +169,7 @@ bundle agent ssh_setup
       "/home/$(users[$(ssh_server)])/.ssh/authorized_keys"
         create => "true",
         edit_defaults => "empty",
-        transformer => "/bin/sed -i '$r $(this.promiser)' /home/$(users[$(ssh_server)])/.ssh/authorized_keys"
+        transformer => "/bin/sed -i '$r $(this.promiser)' /home/$(users[$(ssh_server)])/.ssh/authorized_keys",
         file_select => pub_key_files("$(users[$(ssh_server)])"),
         depth_search => recurse("inf"),
         perms => mog("600", "$(users[$(ssh_server)])", "$(users[$(ssh_server)])"),
