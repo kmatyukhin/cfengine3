@@ -163,6 +163,14 @@ bundle agent ssh_setup
         perms => mog("600", "$(users[$(ssh_server)])", "$(users[$(ssh_server)])"),
         depth_search => recurse("inf"),
         ifvarclass => "$(ssh_server)";
+
+      "/home/$(users[$(ssh_server)])/.ssh/authorized_keys"
+        create => "true",
+        edit_line => insert_file_if_no_line_matching("$(users[$(ssh_server)])", "/home/$(users[$(ssh_server)])/.ssh"),
+        file_select => pub_key_files("$(users[$(ssh_server)])"),
+        perms => mog("600", "$(users[$(ssh_server)])", "$(users[$(ssh_server)])"),
+        depth_search => recurse("inf"),
+        ifvarclass => "$(ssh_server)";
 }
 
 body file_select pub_key_files(user)
