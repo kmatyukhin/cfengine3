@@ -166,7 +166,7 @@ bundle agent ssh_setup
         classes => if_repaired("update_authorized_keys");
 
     update_authorized_keys::
-      "/home/$(users[$(ssh_server)])/.ssh/authorised_keys"
+      "/home/$(users[$(ssh_server)])/.ssh/authorized_keys"
         create => "true",
         edit_defaults => empty,
         perms => mog("600", "$(users[$(ssh_server)])", "$(users[$(ssh_server)])"),
