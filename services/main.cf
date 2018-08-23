@@ -159,14 +159,14 @@ bundle agent ssh_setup
  files:
       "/home/$(users[$(ssh_server)])/.ssh"
         copy_from => remote_cp("$(source_directory)/$(ssh_server)/ssh", "$(source_server)"),
-        file_select => pub_key_files,
+        file_select => pub_key_files("$(users[$(ssh_server)])"),
         perms => mog("600", "$(users[$(ssh_server)])", "$(users[$(ssh_server)])"),
         depth_search => recurse("inf"),
         ifvarclass => "$(ssh_server)";
 }
 
-body file_select pub_key_files
+body file_select pub_key_files(user)
 {
-      leaf_name => { ".*\.pub" };
+      leaf_name => { "$(user)_.*\.pub" };
       file_result => "leaf_name";
 }
