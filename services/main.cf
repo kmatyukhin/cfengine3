@@ -164,12 +164,11 @@ bundle agent ssh_setup
         depth_search => recurse("inf"),
         ifvarclass => "$(ssh_server)",
         classes => if_repaired("create_authorized_keys");
-
     create_authorized_keys::
       "/home/$(users[$(ssh_server)])/.ssh/authorized_keys"
         create => "true",
-        edit_defaults => std_defs,
-        edit_line => insert_lines("#-- updated by CFEngine --"),
+        edit_defaults => empty,
+        edit_line => insert_lines("# --- updated by CFEngine --- #"),
         perms => mog("600", "$(users[$(ssh_server)])", "$(users[$(ssh_server)])"),
         ifvarclass => "$(ssh_server)",
         classes => if_repaired("authorized_keys_created");
