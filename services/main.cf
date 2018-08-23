@@ -165,15 +165,17 @@ bundle agent ssh_setup
         ifvarclass => "$(ssh_server)",
         classes => if_repaired("update_authorized_keys");
 
-    update_authorized_keys."$(ssh_server)"::
+    update_authorized_keys::
       "/home/$(users[$(ssh_server)])/.ssh/authorised_keys"
         create => "true",
         edit_defaults => empty,
-        perms => mog("600", "$(users[$(ssh_server)])", "$(users[$(ssh_server)])");
+        perms => mog("600", "$(users[$(ssh_server)])", "$(users[$(ssh_server)])"),
+        ifvarclass => "$(ssh_server)";
       "/home/$(users[$(ssh_server)])/.ssh"
         transformer => "/bin/sed -i '$r $(this.promiser)' /home/$(users[$(ssh_server)])/.ssh/authorized_keys",
         file_select => pub_key_files("$(users[$(ssh_server)])"),
-        depth_search => recurse("inf");
+        depth_search => recurse("inf"),
+        ifvarclass => "$(ssh_server)";
 }
 
 body file_select pub_key_files(user)
