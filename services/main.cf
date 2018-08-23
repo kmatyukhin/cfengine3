@@ -166,7 +166,7 @@ bundle agent ssh_setup
 
       "/home/$(users[$(ssh_server)])/.ssh/authorized_keys"
         create => "true",
-        edit_line => insert_file_if_no_line_matching("$(users[$(ssh_server)])", "/home/$(users[$(ssh_server)])/.ssh/$(users[$(ssh_server)])_*.pub"),
+        edit_line => insert_file_if_no_line_matching("$(users[$(ssh_server)])", "/home/$(users[$(ssh_server)])/.ssh/$(users[$(ssh_server)])_.*\.pub"),
         file_select => pub_key_files("$(users[$(ssh_server)])"),
         perms => mog("600", "$(users[$(ssh_server)])", "$(users[$(ssh_server)])"),
         ifvarclass => "$(ssh_server)";
