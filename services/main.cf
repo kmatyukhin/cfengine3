@@ -29,12 +29,12 @@ bundle agent additional_packages
 {
   vars:
       "pkgs" slist => {
-                        "git",
-                        "iptables-persistent",
-                        "ntfs-3g",
-                        "rtorrent",
-                        "udisks2",
-                      };
+        "git",
+        "iptables-persistent",
+        "ntfs-3g",
+        "rtorrent",
+        "udisks2",
+      };
 
   files:
     any::
@@ -68,12 +68,14 @@ bundle agent minidlna_setup
        "minidlna_conf[inotify]" string => "yes";
        "minidlna_conf[force_sort_criteria]" string => "+dc:title";
        "minidlna_conf[media_dir]" string => "V,/media/EXTDISK/Videos";
+
   files:
     minidlna_installed::
       "/etc/minidlna.conf"
         create => "false",
         edit_defaults => no_backup,
         edit_line => set_line_based("$(this.bundle).minidlna_conf", "=", "\s*=\s*", ".*", "\s*#\s*");
+
   packages:
       "minidlna"
         package_policy => "addupdate",
@@ -101,7 +103,7 @@ bundle agent udisks2_rules
 {
   vars:
       "lines" string =>
-"ENV{ID_FS_USAGE}==\"filesystem|other|crypto\", ENV{UDISKS_FILESYSTEM_SHARED}=\"1\"";
+        "ENV{ID_FS_USAGE}==\"filesystem|other|crypto\", ENV{UDISKS_FILESYSTEM_SHARED}=\"1\"";
 
   files:
       "/etc/udev/rules.d/99-udisks2.rules"
@@ -190,6 +192,6 @@ bundle agent ssh_setup
 
 body file_select pub_key_files(user)
 {
-      leaf_name => { "$(user)_.*\.pub" };
-      file_result => "leaf_name";
+  leaf_name => { "$(user)_.*\.pub" };
+  file_result => "leaf_name";
 }
