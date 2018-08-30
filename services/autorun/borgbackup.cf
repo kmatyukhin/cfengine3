@@ -10,6 +10,10 @@ bundle agent borgbackup_autorun
   meta:
       "tags" slist => { "autorun" };
 
+  packages:
+      "borgbackup"
+        package_policy => "addupdate";
+
   methods:
       "server"
         usebundle => borgbackup_server,
@@ -25,10 +29,6 @@ bundle agent borgbackup_server
       "source_server"    string => "$(sys.policy_hub)";
       "source_directory" string => "$(def.dir_files)";
       "user"             string => "borg";
-
-  packages:
-      "borgbackup"
-        package_policy => "addupdate";
 
   files:
     borg_user_present::
