@@ -2,7 +2,7 @@ bundle common borgbackup
 {
   vars:
       "servers" slist  => { 'raspberrypi' };
-      "clients" slist  => { 'air' };
+      "clients" slist  => { 'air', 'provenza' };
 }
 
 bundle agent borgbackup_autorun
