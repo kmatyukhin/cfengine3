@@ -39,7 +39,6 @@ bundle agent borgbackup_server
         action => if_elapsed("60");
       "/home/$(user)/.ssh/authorized_keys"
         create => "true",
-        edit_defaults => empty,
         edit_line => insert_file_if_no_line_matching("$(user)", "$(source_directory)/$(borgbackup.servers)/borgbackup/$(borgbackup.clients)_borgbackup.pub"),
         perms => mog("600", "$(user)", "$(user)"),
         action => if_elapsed("60");
