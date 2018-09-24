@@ -225,6 +225,6 @@ bundle agent samba_setup
 
   files:
       "/etc/samba/smb.conf"
-        edit_line => insert_innit_section("$(shares[$(samba_server)])", "@(shares_$(samba_server))"),
+        edit_line => insert_ini_section("$(shares[$(samba_server)])", "@(shares_$(samba_server))"),
         ifvarclass => "$(samba_server)";
 }
