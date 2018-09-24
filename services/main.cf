@@ -225,6 +225,18 @@ bundle agent samba_setup
 
   files:
       "/etc/samba/smb.conf"
-        edit_line => insert_ini_section("$(shares_$(samba_server))", "$(this.bundle).shares[$(samba_server)][$(shares_$(samba_server))]"),
+        edit_line => insert_ini_section_fixed("$(shares_$(samba_server))", "$(this.bundle).shares[$(samba_server)][$(shares_$(samba_server))]"),
         ifvarclass => "$(samba_server)";
+}
+
+bundle edit_line insert_ini_section_fixed(name, config)
+{
+  vars:
+      "k" slist => getindices($(config));
+
+  insert_lines:
+      "[$(name)]";
+
+      "$(k)=$($(config)[$(k)])"
+        location => after("[$(name)]");
 }
