@@ -203,7 +203,28 @@ body file_select pub_key_files(user)
 
 bundle agent samba_setup
 {
+  vars:
+      "shares" data => parsejson('{
+        "raspberrypi": {
+          "music": {
+            "path": "yes",
+            "browsable": "yes",
+            "guest ok": "yes",
+            "read only": "yes",
+            "write list": "pi",
+            "create mask": "0755"
+          }
+        }
+      }');
+      "samba_server" slist => getindices("shares");
+      "shares_$(samba_server)" data => mergedata("shares[$(samba_server)]");
+
   packages:
       "samba"
         package_policy => "addupdate";
+
+  files:
+      "/etc/samba/smb.conf"
+        edit_line => insert_innit_section("$(shares[$(samba_server)])", "@(shares_$(samba_server))"),
+        ifvarclass => "$(samba_server)";
 }
