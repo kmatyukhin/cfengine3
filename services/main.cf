@@ -225,6 +225,9 @@ bundle agent samba_setup
 
   files:
       "/etc/samba/smb.conf"
+        edit_line => insert_before_if_no_line("[homes]", "[$(shares_$(samba_server))]"),
+        classes => if_ok("shares_$(samba_server)_ok");
+      "/etc/samba/smb.conf"
         edit_line => manage_variable_values_ini("$(this.bundle).shares[$(samba_server)]", "$(shares_$(samba_server))"),
-        ifvarclass => "$(samba_server)";
+        ifvarclass => "$(samba_server).shares_$(samba_server)_ok";
 }
