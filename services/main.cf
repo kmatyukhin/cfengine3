@@ -217,7 +217,7 @@ bundle agent samba_setup
         }
       }');
       "samba_server" slist => getindices("shares");
-      "shares_$(samba_server)" data => mergedata("shares[$(samba_server)]");
+      "shares_$(samba_server)" slist => getindices("shares[$(samba_server)]");
 
   packages:
       "samba"
@@ -225,6 +225,6 @@ bundle agent samba_setup
 
   files:
       "/etc/samba/smb.conf"
-        edit_line => insert_ini_section("$(shares[$(samba_server)])", "@(shares_$(samba_server))"),
+        edit_line => insert_ini_section("$(shares_$(samba_server))", "$(this.bundle).shares[$(samba_server)][$(shares_$(samba_server))]"),
         ifvarclass => "$(samba_server)";
 }
