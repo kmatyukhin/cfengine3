@@ -72,7 +72,7 @@ bundle agent minidlna_setup
   vars:
        "minidlna_conf[inotify]" string => "yes";
        "minidlna_conf[force_sort_criteria]" string => "+dc:title";
-       "minidlna_conf[media_dir]" string => "V,/media/EXTDISK/Videos";
+       "minidlna_conf[media_dir]" string => "V,/media/EXTDISK/Video";
 
   files:
     minidlna_installed::
@@ -208,6 +208,14 @@ bundle agent samba_setup
         "raspberrypi": {
           "music": {
             "path": "/media/EXTDISK/Music",
+            "browsable": "yes",
+            "guest ok": "yes",
+            "read only": "yes",
+            "write list": "pi",
+            "create mask": "0755"
+          },
+          "video": {
+            "path": "/media/EXTDISK/Video",
             "browsable": "yes",
             "guest ok": "yes",
             "read only": "yes",
