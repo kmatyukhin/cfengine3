@@ -72,7 +72,7 @@ bundle agent minidlna_setup
   vars:
        "minidlna_conf[inotify]" string => "yes";
        "minidlna_conf[force_sort_criteria]" string => "+dc:title";
-       "minidlna_conf[media_dir]" string => "V,/media/EXTDISK/Video";
+       "minidlna_conf[media_dir]" string => "V,/media/EXTDISK/Videos";
 
   files:
     minidlna_installed::
@@ -215,7 +215,7 @@ bundle agent samba_setup
             "create mask": "0755"
           },
           "video": {
-            "path": "/media/EXTDISK/Video",
+            "path": "/media/EXTDISK/Videos",
             "browsable": "yes",
             "guest ok": "yes",
             "read only": "yes",
