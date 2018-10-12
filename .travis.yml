@@ -14,3 +14,7 @@ install:
   - sudo dpkg -i cfengine-community_${CFENGINE3_VERSION}_amd64.deb
 
 script: /var/cfengine/bin/cf-promises --full-check --file ./promises.cf
+
+after_success:
+  - curl -o /tmp/travis-automerge https://raw.githubusercontent.com/kmatyukhin/travis-automerge/master/travis-automerge
+  - chmod a+x /tmp/travis-automerge
