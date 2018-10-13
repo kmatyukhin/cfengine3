@@ -4,7 +4,10 @@ os:
   - linux
 
 env:
-  - CFENGINE3_VERSION=3.9.2-1
+  matrix:
+    - CFENGINE3_VERSION=3.9.2-1
+  global:
+    secure: h1T0JruAVERfPQPjf+0yMJBWZxUX23p5dHKBuWYE2OMEpyu+CNoY9jaiqeWAV9ioss8+GSaS3CINtLNdXbSlNHCSx1aQcSXmwX5UAjJocbfS6qp4zzQj6UcwWG/HpiVIoyz45gdW0DN7vfXBDExvWswqLAsn/7O+C3SFYNntHYCHZ5PAX/Lrb728E+ysmwUlZsNCXQQxyK1WVO6kbCPAg3tY87XtejkUGFs6OKLqZq75k40fLYTNgPaf/i0TAbgPnfna80S022xfr9fb9x6lcrtBOWGJl0ojtWr6/QeR/0/zT2IE7R12luJQBN41DgWioqXosBifXD8k5l2XOL4LNA7ooKaa/UMy06HsSwUkIeQozfnA3Nm+F1TIinMyCQJC5SsnSejl36mKcnY8JmVVv1giwZu/FXWeonvgoUKhwYHTdxt6ip/vLLi8pIieLwsqqi+mD863vGo6UMzl0kKcxKS9/0fdx/bfxzVLp4v/2csDotZU0w4AhgXIjTwG5/wwxnNAgsU0c+ojQj/UdaN0jpd0u7ykDljZ9JorWx4UGdva1EgDOvuH/DpustccY82dzyyGSh5TLurksZ7Syj2THDpk6rO+qtTEfZam4jy5VcQYg2yi9fn/fFVbsfItpsd1yDJgFxZtQluC1RsxkxR4NDbS/dPXm1KEY//9+xFeNn4=
 
 cache:
   - apt
@@ -12,8 +15,6 @@ cache:
 branches:
   only:
     - develop
-
-secure: "kqhFIT9XLXixU9OGPvJVII8kuc7WT1SkdYJnNxn7yMJHkhXpVyVn1qcs6qldUSn/HoVLISy70h7Oxtt5Z+wHGuE242EUkQPxMY//VHes+BpHzM3NmK7aRsz+EU8JmFt3kEb1c4NIJAYR4hjKczm7soLDNdp+LymdLokpO36q2FK58HH9dCd8I4RQoa2p87hVYx/auCydi3l2cKtmW29E43e4ZbG7el2fKR/Gt05aVyTwAfH9qHJmw3+3TzpBCok9AKuW9dNhQwbb1/ccW5d8u+qVGi7k6l8UCE2JJaxZulipz5SpW6GJjDLDbQkGuCozv1Sg7oqH4ga9ot68vrH5YqR1HBsuLJ2860Bh6uC8QQksgogd4v9phNTZVcwP5l3RG1ozVFSxqB8Y5L+Ec2I/aWIPtxONBkIdEIq1+pyQIxqczekm/4OcGH1qTdPQEDwCScq1h91zlserMwvuSgxFsjcU80/wXrjdK0uPfujkerYWm/O/LZpTzidnuA9k1iXPqhtuc25GDljyxbtMuteLkVE4atQf9vZzF5CcE/Jhg8kB3mx3qOgIcIte/dmlgb2dGJVnVp0pn4FBF5yV7wSzT4wpl3zeXebMq8nctH+iDSeM2QwoNrxDo7U1uV4zUVJi9cE4J9qWE+Re4kOeBZ+wkuJt3nB/e0bJC/FgK/To38A="
 
 install:
   - wget https://cfengine-package-repos.s3.amazonaws.com/community_binaries/cfengine-community_${CFENGINE3_VERSION}_amd64.deb
