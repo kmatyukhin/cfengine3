@@ -13,6 +13,8 @@ branches:
   only:
     - develop
 
+secure: "kqhFIT9XLXixU9OGPvJVII8kuc7WT1SkdYJnNxn7yMJHkhXpVyVn1qcs6qldUSn/HoVLISy70h7Oxtt5Z+wHGuE242EUkQPxMY//VHes+BpHzM3NmK7aRsz+EU8JmFt3kEb1c4NIJAYR4hjKczm7soLDNdp+LymdLokpO36q2FK58HH9dCd8I4RQoa2p87hVYx/auCydi3l2cKtmW29E43e4ZbG7el2fKR/Gt05aVyTwAfH9qHJmw3+3TzpBCok9AKuW9dNhQwbb1/ccW5d8u+qVGi7k6l8UCE2JJaxZulipz5SpW6GJjDLDbQkGuCozv1Sg7oqH4ga9ot68vrH5YqR1HBsuLJ2860Bh6uC8QQksgogd4v9phNTZVcwP5l3RG1ozVFSxqB8Y5L+Ec2I/aWIPtxONBkIdEIq1+pyQIxqczekm/4OcGH1qTdPQEDwCScq1h91zlserMwvuSgxFsjcU80/wXrjdK0uPfujkerYWm/O/LZpTzidnuA9k1iXPqhtuc25GDljyxbtMuteLkVE4atQf9vZzF5CcE/Jhg8kB3mx3qOgIcIte/dmlgb2dGJVnVp0pn4FBF5yV7wSzT4wpl3zeXebMq8nctH+iDSeM2QwoNrxDo7U1uV4zUVJi9cE4J9qWE+Re4kOeBZ+wkuJt3nB/e0bJC/FgK/To38A="
+
 install:
   - wget https://cfengine-package-repos.s3.amazonaws.com/community_binaries/cfengine-community_${CFENGINE3_VERSION}_amd64.deb
   - sudo dpkg -i cfengine-community_${CFENGINE3_VERSION}_amd64.deb
@@ -22,3 +24,4 @@ script: /var/cfengine/bin/cf-promises --full-check --file ./promises.cf
 after_success:
   - curl -o /tmp/travis-automerge https://raw.githubusercontent.com/kmatyukhin/travis-automerge/master/travis-automerge
   - chmod a+x /tmp/travis-automerge
+  - BRANCHES_TO_MERGE_REGEX='^develop' BRANCH_TO_MERGE_INTO=master GITHUB_REPO=kmatyukhin/cfengine3 /tmp/travis-automerge
