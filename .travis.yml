@@ -9,6 +9,10 @@ env:
 cache:
   - apt
 
+branches:
+  only:
+    - develop
+
 install:
   - wget https://cfengine-package-repos.s3.amazonaws.com/community_binaries/cfengine-community_${CFENGINE3_VERSION}_amd64.deb
   - sudo dpkg -i cfengine-community_${CFENGINE3_VERSION}_amd64.deb
