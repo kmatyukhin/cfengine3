@@ -237,5 +237,15 @@ bundle agent samba_setup
         classes => if_ok("shares_$(samba_server)_ok");
       "/etc/samba/smb.conf"
         edit_line => manage_variable_values_ini("$(this.bundle).shares[$(samba_server)]", "$(shares_$(samba_server))"),
-        ifvarclass => "$(samba_server).shares_$(samba_server)_ok";
+        ifvarclass => "$(samba_server).shares_$(samba_server)_ok",
+        classes => if_repaired("reload_samba");
+
+  processes:
+      "smbd"
+        restart_class => "reload_samba";
+
+  commands:
+    reload_samba::
+      "/bin/systemctl reload smbd"
+        contain => in_shell_and_silent;
 }
