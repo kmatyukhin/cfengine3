@@ -238,14 +238,14 @@ bundle agent samba_setup
       "/etc/samba/smb.conf"
         edit_line => manage_variable_values_ini("$(this.bundle).shares[$(samba_server)]", "$(shares_$(samba_server))"),
         ifvarclass => "$(samba_server).shares_$(samba_server)_ok",
-        classes => if_repaired("reload_samba");
+        classes => if_repaired("$(samba_server)_reload_samba");
 
   processes:
       "smbd"
-        restart_class => "reload_samba";
+        restart_class => "$(samba_server)_reload_samba";
 
   commands:
-    reload_samba::
       "/bin/systemctl reload smbd"
-        contain => in_shell_and_silent;
+        contain => in_shell_and_silent,
+        ifvarclass => "$(samba_server)_reload_samba";
 }
