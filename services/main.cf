@@ -260,8 +260,14 @@ bundle agent dns_server_setup
         "pdns-server",
         "pdns-backend-bind",
       };
+      "source_server"      string => "$(sys.policy_hub)";
+      "source_directory"   string => "$(def.dir_files)";
 
   packages:
       "$(pkgs)"
         package_policy => "addupdate";
+
+  files:
+      "/etc/powerdns/named.conf"
+        copy_from => remote_cp("$(source_directory)/$(sys.host)/powerdns/named.conf", "$(source_server)");
 }
