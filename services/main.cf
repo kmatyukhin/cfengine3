@@ -10,6 +10,7 @@ bundle agent main
 {
   classes:
       "samba_server" or => { "raspberrypi" };
+      "dns_server"   or => { "raspberrypi" };
 
   services:
       "ssh" service_policy => "start";
@@ -28,6 +29,8 @@ bundle agent main
       "devmon"     usebundle => devmon_setup;
     samba_server::
       "samba"      usebundle => samba_setup;
+    dns_server::
+      "dns_server" usebundle => dns_server_setup;
 }
 
 bundle agent additional_packages
@@ -248,4 +251,17 @@ bundle agent samba_setup
       "/bin/systemctl reload smbd"
         contain => in_shell_and_silent,
         ifvarclass => "$(samba_server)_reload_samba";
+}
+
+bundle agent dns_server_setup
+{
+  vars:
+      "pkgs" slist => {
+        "pdns-server",
+        "pdns-backend-bind",
+      };
+
+  packages:
+      "$(pkgs)"
+        package_policy => "addupdate";
 }
