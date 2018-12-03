@@ -280,7 +280,8 @@ bundle agent dns_server_setup
   files:
     powerdns_installed::
       "/etc/powerdns/named.conf"
-        copy_from => remote_cp("$(source_directory)/$(sys.host)/powerdns/named.conf", "$(source_server)");
+        copy_from => remote_cp("$(source_directory)/$(sys.host)/powerdns/named.conf", "$(source_server)"),
+        perms => m("644");
       "/etc/powerdns/pdns.conf"
         create => "false",
         edit_line => set_line_based("$(this.bundle).pdns_conf", "=", "\s*=\s*", ".*", "\s*#\s*");
