@@ -268,7 +268,8 @@ bundle agent dns_server_setup
       "pdns_conf[master]"         string => "yes";
 
       "zones" slist => {
-        "netrino.ru"
+        "netrino.ru",
+        "rootserv.ru",
       };
 
   packages:
