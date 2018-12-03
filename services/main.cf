@@ -266,6 +266,10 @@ bundle agent dns_server_setup
 
       "pdns_conf[allow-axfr-ips]" string => "216.218.133.2/32,2001:470:600::2";
 
+      "zones" slist => {
+        "netrino.ru"
+      };
+
   packages:
       "$(pkgs)"
         package_policy => "addupdate",
@@ -278,4 +282,6 @@ bundle agent dns_server_setup
       "/etc/powerdns/pdns.conf"
         create => "false",
         edit_line => set_line_based("$(this.bundle).pdns_conf", "=", "\s*=\s*", ".*", "\s*#\s*");
+      "/etc/powerdns/$(zones)"
+        copy_from => remote_cp("$(source_directory)/$(sys.host)/powerdns/$(zones)", "$(source_server)");
 }
