@@ -264,9 +264,11 @@ bundle agent dns_server_setup
       "source_server"    string => "$(sys.policy_hub)";
       "source_directory" string => "$(def.dir_files)";
 
-      "pdns_conf[allow-axfr-ips]"      string => "216.218.133.2/32,2001:470:600::2";
       "pdns_conf[master]"              string => "yes";
       "pdns_conf[distributor-threads]" string => "1";
+      "pdns_conf[allow-axfr-ips]"      string => "216.218.133.2/32,2001:470:600::2";
+      "pdns_conf[only-notify]"         string => "";
+      "pdns_conf[also-notify]"         string => "ns1.he.net";
 
       "zones" slist => {
         "netrino.ru",
