@@ -20,17 +20,18 @@ bundle agent main
       "packages"   usebundle => additional_packages;
       "sysctl"     usebundle => edit_sysctl;
       "udisks2"    usebundle => udisks2_rules;
-      "vcs_update" usebundle => vcs_update;
       "ssh"        usebundle => ssh_setup;
+    policy_server::
+      "vcs_update" usebundle => vcs_update;
+    samba_server::
+      "samba"      usebundle => samba_setup;
+    dns_server::
+      "dns_server" usebundle => dns_server_setup;
     raspberrypi::
       "eth0_alias" usebundle => eth0_alias;
       "ipv6"       usebundle => enable_ipv6;
       "minidlna"   usebundle => minidlna_setup;
       "devmon"     usebundle => devmon_setup;
-    samba_server::
-      "samba"      usebundle => samba_setup;
-    dns_server::
-      "dns_server" usebundle => dns_server_setup;
     netrino::
       "users"      usebundle => users_setup;
 }
@@ -41,13 +42,11 @@ bundle agent users_setup
       "users" data => parsejson('{
         "netrino": {
           "kv": {
-            "description": "kventin",
             "uid": 1000,
             "gid": 1000
           }
         }
       }');
-
       "hosts" slist => getindices("users");
       "users_$(hosts)" slist => getindices("users[$(hosts)]");
 
@@ -59,15 +58,24 @@ bundle agent users_setup
       "$(paths.groupadd)"
         args => "--gid $(users[$(hosts)][$(users_$(hosts))][gid]) $(users_$(hosts))",
         ifvarclass => "group_$(users_$(hosts))_absent";
+
+  users:
+      "$(users_$(hosts))"
+        uid => "$(users[$(hosts)][$(users_$(hosts))][uid])",
+        group_primary => "$(users_$(hosts))",
+        home_dir => "/home/$(users_$(hosts))",
+        home_bundle => home_skel($(users_$(hosts)), "/etc/skel"),
+        policy => "present",
+        ifvarclass => not("group_$(users_$(hosts))_absent");
 }
 
 bundle agent home_skel(user, skel)
 {
   files:
-    "/home/$(user)/."
-      create => "true",
-      copy_from => seed_cp( $(skel) ),
-      depth_search => recurse( "inf" );
+      "/home/$(user)/."
+        create => "true",
+        copy_from => seed_cp($(skel)),
+        depth_search => recurse("inf");
 }
 
 bundle agent additional_packages
@@ -186,7 +194,6 @@ bundle agent devmon_setup
 bundle agent vcs_update
 {
   commands:
-    policy_server::
       "/usr/bin/git"
         args => "pull --ff-only origin master",
         contain => silent_in_dir("$(sys.masterdir)");
