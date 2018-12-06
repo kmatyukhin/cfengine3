@@ -226,7 +226,8 @@ bundle agent ssh_setup
         edit_line => set_line_based("$(this.bundle).sshd_conf", " ", "\s+", ".*", "\s*#\s*");
       "/home/$(users[$(ssh_server)])/.ssh/."
         create => "true",
-        perms => mog("700", "$(users[$(ssh_server)])", "$(users[$(ssh_server)])");
+        perms => mog("700", "$(users[$(ssh_server)])", "$(users[$(ssh_server)])"),
+        ifvarclass => "$(ssh_server)";
       "/home/$(users[$(ssh_server)])/.ssh"
         copy_from => remote_cp("$(source_directory)/$(ssh_server)/ssh", "$(source_server)"),
         file_select => pub_key_files("$(users[$(ssh_server)])"),
