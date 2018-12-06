@@ -65,6 +65,7 @@ bundle agent users_setup
         group_primary => "$(users_$(hosts))",
         home_dir => "/home/$(users_$(hosts))",
         home_bundle => home_skel("$(users_$(hosts))", "/etc/skel"),
+        shell => "/bin/bash",
         policy => "present",
         ifvarclass => "!group_$(users_$(hosts))_absent";
 }
@@ -75,6 +76,7 @@ bundle agent home_skel(user, skel)
       "/home/$(user)/."
         create => "true",
         copy_from => seed_cp($(skel)),
+        perms => mog("644", $(user), $(user)),
         depth_search => recurse("inf");
 }
 
