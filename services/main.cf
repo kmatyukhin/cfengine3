@@ -348,5 +348,5 @@ bundle agent dns_server_setup
 
   commands:
       "/usr/bin/pdns_control bind-reload-now $(zones)"
-        if => classify("zone_$(zones)_reload");
+        ifvarclass => canonify("zone_$(zones)_reload");
 }
