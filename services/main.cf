@@ -31,6 +31,43 @@ bundle agent main
       "samba"      usebundle => samba_setup;
     dns_server::
       "dns_server" usebundle => dns_server_setup;
+    netrino::
+      "users"      usebundle => users_setup;
+}
+
+bundle agent users_setup
+{
+  vars:
+      "users" data => parsejson('{
+        "netrino": {
+          "kv": {
+            "description": "kventin",
+            "uid": 1000,
+            "gid": 1000
+          }
+        }
+      }');
+
+      "hosts" slist => getindices("users");
+      "users_$(hosts)" slist => getindices("users[$(hosts)]");
+
+  classes:
+      "group_$(users_$(hosts))_absent"
+        not => groupexists($(users_$(hosts)));
+
+  commands:
+      "$(paths.groupadd)"
+        args => "--gid users[$(hosts)][$(users_$(hosts))][gid] $(users_$(hosts))",
+        ifvarclass => "group_$(users_$(hosts))_absent";
+}
+
+bundle agent home_skel(user, skel)
+{
+  files:
+    "/home/$(user)/."
+      create => "true",
+      copy_from => seed_cp( $(skel) ),
+      depth_search => recurse( "inf" );
 }
 
 bundle agent additional_packages
