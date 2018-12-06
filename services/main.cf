@@ -360,6 +360,5 @@ bundle agent dns_server_setup
         ifvarclass => and(classify("zone_$(zones)_reload"), classify("zone_$(zones)_ok"));
 
   reports:
-      "Zone $(zones) has been changed"
-        ifvarclass => and(classify("zone_$(zones)_ok"));
+      concat("canonified: ", canonify("zone_$(zones)_ok"));
 }
