@@ -57,7 +57,7 @@ bundle agent users_setup
 
   commands:
       "$(paths.groupadd)"
-        args => "--gid users[$(hosts)][$(users_$(hosts))][gid] $(users_$(hosts))",
+        args => "--gid $(users[$(hosts)][$(users_$(hosts))][gid]) $(users_$(hosts))",
         ifvarclass => "group_$(users_$(hosts))_absent";
 }
 
