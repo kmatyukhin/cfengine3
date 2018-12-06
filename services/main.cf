@@ -64,9 +64,9 @@ bundle agent users_setup
         uid => "$(users[$(hosts)][$(users_$(hosts))][uid])",
         group_primary => "$(users_$(hosts))",
         home_dir => "/home/$(users_$(hosts))",
-        home_bundle => home_skel($(users_$(hosts)), "/etc/skel"),
+        home_bundle => home_skel("$(users_$(hosts))", "/etc/skel"),
         policy => "present",
-        ifvarclass => not("group_$(users_$(hosts))_absent");
+        ifvarclass => "!group_$(users_$(hosts))_absent";
 }
 
 bundle agent home_skel(user, skel)
