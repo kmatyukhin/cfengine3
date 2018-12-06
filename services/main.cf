@@ -338,5 +338,10 @@ bundle agent dns_server_setup
         edit_line => set_line_based("$(this.bundle).pdns_conf", "=", "\s*=\s*", ".*", "\s*#\s*");
       "/etc/powerdns/$(zones)"
         copy_from => remote_cp("$(source_directory)/$(sys.host)/powerdns/$(zones)", "$(source_server)"),
-        perms => m("644");
+        perms => m("644"),
+        classes => if_repaired(concat("reload_zone_", canonify($(zones))));
+
+  commands:
+      "/usr/bin/pdns_control bind-reload-now $(zones)"
+        ifvarclass => concat("reload_zone_", canonify($(zones)));
 }
