@@ -344,9 +344,9 @@ bundle agent dns_server_setup
       "/etc/powerdns/$(zones)"
         copy_from => remote_cp("$(source_directory)/$(sys.host)/powerdns/$(zones)", "$(source_server)"),
         perms => m("644"),
-        classes => if_repaired(canonify("zone_$(zones)"));
+        classes => if_repaired(canonify("zone_$(zones)_reload"));
 
   commands:
       "/usr/bin/pdns_control bind-reload-now $(zones)"
-        if => canonify("zone_$(zones)_repaired");
+        if => classify("zone_$(zones)_reload");
 }
