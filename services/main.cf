@@ -75,6 +75,8 @@ bundle agent home_skel(user, skel)
   files:
       "/home/$(user)/."
         create => "true",
+        perms => mog("750", $(user), $(user));
+      "/home/$(user)/."
         copy_from => seed_cp($(skel)),
         perms => mog("644", $(user), $(user)),
         depth_search => recurse("inf");
