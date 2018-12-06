@@ -53,7 +53,7 @@ bundle agent users_setup
 
   classes:
       "group_$(users_$(hosts))_absent"
-        not => groupexists($(users_$(hosts)));
+        not => groupexists("$(users_$(hosts))");
 
   commands:
       "$(paths.groupadd)"
