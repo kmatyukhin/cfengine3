@@ -211,6 +211,7 @@ bundle agent ssh_setup
 
       "users[raspberrypi]" slist => { "pi" };
       "users[air]"         slist => { "kv" };
+      "users[netrino]"     slist => { "kv" };
 
       "ssh_server"         slist => getindices("users");
 
