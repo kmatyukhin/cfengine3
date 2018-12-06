@@ -49,6 +49,7 @@ bundle agent users_setup
       }');
       "hosts" slist => getindices("users");
       "users_$(hosts)" slist => getindices("users[$(hosts)]");
+      "sudo_nopasswd" string => "ALL=(ALL) NOPASSWD: ALL";
 
   classes:
       "group_$(users_$(hosts))_absent"
@@ -68,6 +69,12 @@ bundle agent users_setup
         shell => "/bin/bash",
         policy => "present",
         ifvarclass => "!group_$(users_$(hosts))_absent";
+
+  files:
+      "/etc/sudoers.d/010_nopasswd"
+        create => "true",
+        edit_defaults => no_backup,
+        edit_line => append_if_no_line("$(users_$(hosts)) $(sudo_nopasswd)");
 }
 
 bundle agent home_skel(user, skel)
