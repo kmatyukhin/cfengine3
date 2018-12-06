@@ -358,4 +358,8 @@ bundle agent dns_server_setup
   commands:
       "/usr/bin/pdns_control bind-reload-now $(zones)"
         ifvarclass => and(classify("zone_$(zones)_reload"), classify("zone_$(zones)_ok"));
+
+  reports:
+      "Zone $(zones) has been changed"
+        ifvarclass => and(classify("zone_$(zones)_ok"));
 }
