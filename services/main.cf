@@ -11,29 +11,32 @@ bundle agent main
   classes:
       "samba_server" or => { "raspberrypi" };
       "dns_server"   or => { "raspberrypi" };
+      "mail_server"  or => { "netrino" };
 
   services:
       "ssh" service_policy => "start";
 
   methods:
     any::
-      "packages"   usebundle => additional_packages;
-      "sysctl"     usebundle => edit_sysctl;
-      "udisks2"    usebundle => udisks2_rules;
-      "ssh"        usebundle => ssh_setup;
+      "packages"    usebundle => additional_packages;
+      "sysctl"      usebundle => edit_sysctl;
+      "udisks2"     usebundle => udisks2_rules;
+      "ssh"         usebundle => ssh_setup;
     policy_server::
-      "vcs_update" usebundle => vcs_update;
+      "vcs_update"  usebundle => vcs_update;
     samba_server::
-      "samba"      usebundle => samba_setup;
+      "samba"       usebundle => samba_setup;
     dns_server::
-      "dns_server" usebundle => dns_server_setup;
+      "dns_server"  usebundle => dns_server_setup;
+    mail_server::
+      "mail_server" usebundle => mail_server_setup;
     raspberrypi::
-      "eth0_alias" usebundle => eth0_alias;
-      "ipv6"       usebundle => enable_ipv6;
-      "minidlna"   usebundle => minidlna_setup;
-      "devmon"     usebundle => devmon_setup;
+      "eth0_alias"  usebundle => eth0_alias;
+      "ipv6"        usebundle => enable_ipv6;
+      "minidlna"    usebundle => minidlna_setup;
+      "devmon"      usebundle => devmon_setup;
     netrino::
-      "users"      usebundle => users_setup;
+      "users"       usebundle => users_setup;
 }
 
 bundle agent users_setup
@@ -357,4 +360,12 @@ bundle agent dns_server_setup
       "/usr/bin/pdns_control bind-reload-now $(zones)"
         contain => silent,
         ifvarclass => classify("zone_$(zones)_reload");
+}
+
+bundle agent mail_server_setup
+{
+  packages:
+      "postfix"
+        package_policy => "addupdate",
+        classes => if_ok("postfix_installed");
 }
