@@ -382,10 +382,6 @@ bundle agent mail_server_setup
         package_policy => "addupdate",
         classes => if_ok("postfix_installed");
 
-  classes:
-      "postfix_$(maps)_updated"
-        expression => isnewerthan("/etc/postfix/$(maps)", "/etc/postfix/$(maps).db");
-
   files:
     postfix_installed::
       "/etc/postfix/$(maps)"
@@ -394,5 +390,5 @@ bundle agent mail_server_setup
       "/etc/postfix/$(maps).db"
         create => "true",
         transformer => "/usr/sbin/postmap /etc/postfix/$(maps)",
-        ifvarclass => "postfix_$(maps)_updated";
+        ifvarclass => and(isnewerthan("/etc/postfix/$(maps)", "/etc/postfix/$(maps).db"), "cfengine");
 }
