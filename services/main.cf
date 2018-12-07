@@ -384,7 +384,7 @@ bundle agent mail_server_setup
     postfix_installed::
       "/etc/postfix/."
         copy_from => remote_cp("$(source_directory)/$(sys.host)/postfix", "$(source_server)"),
-        transformer => "/usr/sbin/postmap $(this.promiser)"
+        transformer => "/usr/sbin/postmap $(this.promiser)",
         perms => m("644"),
         depth_search => recurse("inf");
 }
