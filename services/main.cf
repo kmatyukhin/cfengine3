@@ -364,8 +364,26 @@ bundle agent dns_server_setup
 
 bundle agent mail_server_setup
 {
+  vars:
+      "pkgs" slist => {
+        "postfix",
+        "spamassassin",
+        "spamc",
+      };
+
+      "source_server"    string => "$(sys.policy_hub)";
+      "source_directory" string => "$(def.dir_files)";
+
   packages:
-      "postfix"
+      "$(pkgs)"
         package_policy => "addupdate",
         classes => if_ok("postfix_installed");
+
+  files:
+    postfix_installed::
+      "/etc/postfix"
+        copy_from => remote_cp("$(source_directory)/$(sys.host)/postfix", "$(source_server)"),
+        perms => m("644"),
+        depth_search => recurse("inf"),
+        classes => if_repaired("postfix_maps_repaired");
 }
