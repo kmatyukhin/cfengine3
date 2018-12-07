@@ -386,9 +386,10 @@ bundle agent mail_server_setup
     postfix_installed::
       "/etc/postfix/$(maps)"
         copy_from => remote_cp("$(source_directory)/$(sys.host)/postfix/$(maps)", "$(source_server)"),
-        perms => m("644");
+        perms => m("644"),
+        classes => if_repaired("postfix_$(maps)_reload");
       "/etc/postfix/$(maps).db"
         create => "true",
         transformer => "/usr/sbin/postmap /etc/postfix/$(maps)",
-        ifvarclass => and(isnewerthan("/etc/postfix/$(maps)", "/etc/postfix/$(maps).db"), "cfengine");
+        ifvarclass => classify("postfix_$(maps)_reload");
 }
