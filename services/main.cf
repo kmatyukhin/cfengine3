@@ -101,6 +101,7 @@ bundle agent additional_packages
         "ntfs-3g",
         "rtorrent",
         "udisks2",
+        "rsync",
       };
 
   files:
