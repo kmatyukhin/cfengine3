@@ -372,6 +372,8 @@ bundle agent mail_server_setup
         "spamc",
       };
 
+      "maps" slist => { "access", "virtual" };
+
       "source_server"    string => "$(sys.policy_hub)";
       "source_directory" string => "$(def.dir_files)";
 
@@ -382,9 +384,11 @@ bundle agent mail_server_setup
 
   files:
     postfix_installed::
-      "/etc/postfix/."
-        copy_from => remote_cp("$(source_directory)/$(sys.host)/postfix", "$(source_server)"),
-        transformer => "/usr/sbin/postmap $(this.promiser)",
-        perms => m("644"),
-        depth_search => recurse("inf");
+      "/etc/postfix/$(maps)"
+        copy_from => remote_cp("$(source_directory)/$(sys.host)/postfix/$(maps)", "$(source_server)"),
+        perms => m("644");
+      "/etc/postfix/$(maps).db"
+        create => "true",
+        transformer => "/usr/sbin/postmap /etc/postfix/$(maps)",
+        ifvarclass => and(isnewerthan("/etc/postfix/$(maps)", "/etc/postfix/$(maps).db"));
 }
