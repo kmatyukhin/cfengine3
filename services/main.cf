@@ -391,7 +391,7 @@ bundle agent mail_server_setup
       "main_cf[smtpd_tls_auth_only]"      string => "yes";
 
       "spamd_delivery_method" string => "spamassassin unix -     n       n       -       -       pipe
-  flags=O user=spamd argv=/usr/bin/spamc -p 7783 -u ${user} -f -e /usr/sbin/sendmail -oi -f$sender $recipient";
+  flags=O user=spamd argv=/usr/bin/spamc -p 783 -u ${user} -f -e /usr/sbin/sendmail -oi -f$sender $recipient";
 
   packages:
       "$(pkgs)"
