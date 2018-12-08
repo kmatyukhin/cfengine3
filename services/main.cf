@@ -377,6 +377,18 @@ bundle agent mail_server_setup
       "source_server"    string => "$(sys.policy_hub)";
       "source_directory" string => "$(def.dir_files)";
 
+      "main_cf[smtpd_helo_required]"   string => "yes";
+      "main_cf[disable_vrfy_command]"  string => "yes";
+      "main_cf[message_size_limit]"    string => "102400000";
+      "main_cf[myhostname]"            string => "localhost";
+      "main_cf[mydestination]"         string => "localhost.localdomain, localhost";
+      "main_cf[virtual_alias_domains]" string => "netrino.ru";
+      "main_cf[virtual_alias_maps]"    string => "hash:/etc/postfix/virtual"
+
+      "main_cf[smtpd_tls_security_level]" string => "may";
+      "main_cf[smtpd_tls_auth_only]"      string => "yes";
+
+
   packages:
       "$(pkgs)"
         package_policy => "addupdate",
@@ -392,4 +404,7 @@ bundle agent mail_server_setup
         create => "true",
         transformer => "/usr/sbin/postmap /etc/postfix/$(maps)",
         ifvarclass => classify("postfix_$(maps)_reload");
+      "/etc/postfix/main.cf"
+        create => "false",
+        edit_line => set_line_based("$(this.bundle).main_cf", " = ", "\s*=\s*", ".*", "\s*#\s*");
 }
