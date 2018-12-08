@@ -390,11 +390,14 @@ bundle agent mail_server_setup
       "main_cf[smtpd_tls_security_level]" string => "may";
       "main_cf[smtpd_tls_auth_only]"      string => "yes";
 
-
   packages:
       "$(pkgs)"
         package_policy => "addupdate",
         classes => if_ok("postfix_installed");
+
+  services:
+      "spamassassin"
+        service_policy => "enable";
 
   files:
     postfix_installed::
