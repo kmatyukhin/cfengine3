@@ -437,9 +437,9 @@ bundle agent mail_server_setup
         contain => silent;
 }
 
-bundle edit_line append_after_line(regex,string)
+bundle edit_line append_after_line(regex, string)
 {
   insert_lines:
       "$(string)"
-        location => after(regex);
+        location => afer($(regex));
 }
