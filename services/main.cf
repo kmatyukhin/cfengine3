@@ -402,20 +402,31 @@ bundle agent mail_server_setup
       "spamassassin"
         service_policy => "enable";
 
+  processes:
+      "postfix"
+        restart_class => "postfix_reload";
+
   files:
     postfix_installed::
       "/etc/postfix/$(maps)"
         copy_from => remote_cp("$(source_directory)/$(sys.host)/postfix/$(maps)", "$(source_server)"),
         perms => m("644"),
-        classes => if_repaired("postfix_$(maps)_reload");
+        classes => if_repaired("postfix_$(maps)_rehash");
       "/etc/postfix/$(maps).db"
         create => "true",
         transformer => "/usr/sbin/postmap /etc/postfix/$(maps)",
-        ifvarclass => classify("postfix_$(maps)_reload");
+        ifvarclass => classify("postfix_$(maps)_rehash");
       "/etc/postfix/main.cf"
         create => "false",
-        edit_line => set_line_based("$(this.bundle).main_cf", " = ", "\s*=\s*", ".*", "\s*#\s*");
+        edit_line => set_line_based("$(this.bundle).main_cf", " = ", "\s*=\s*", ".*", "\s*#\s*"),
+        classes => if_repaired("postfix_reload");
       "/etc/postfix/master.cf"
         create => "false",
-        edit_line => append_if_no_line("$(spamd_delivery_method)");
+        edit_line => append_if_no_line("$(spamd_delivery_method)"),
+        classes => if_repaired("postfix_reload");
+
+  commands:
+    postfix_reload::
+      "/bin/systemctl reload postfix"
+        contain => silent;
 }
