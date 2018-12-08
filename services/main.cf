@@ -393,6 +393,8 @@ bundle agent mail_server_setup
       "spamd_delivery_method" string => "spamassassin unix -     n       n       -       -       pipe
   flags=O user=debian-spamd argv=/usr/bin/spamc -u ${user} -f -e /usr/sbin/sendmail -oi -f ${sender} ${recipient}";
 
+      "smtp_process_options"  string => "  -o content_filter=spamassassin";
+
   packages:
       "$(pkgs)"
         package_policy => "addupdate",
@@ -424,9 +426,20 @@ bundle agent mail_server_setup
         create => "false",
         edit_line => append_if_no_line("$(spamd_delivery_method)"),
         classes => if_repaired("postfix_reload");
+      "/etc/postfix/master.cf"
+        create => "false",
+        edit_line => append_after_line("smtp\s+.*", $(smtp_process_options)),
+        classes => if_repaired("postfix_reload");
 
   commands:
     postfix_reload::
       "/bin/systemctl reload postfix"
         contain => silent;
+}
+
+bundle edit_line append_after_line(regex,string)
+{
+  insert_lines:
+      "$(string)"
+        location => afer(regex);
 }
