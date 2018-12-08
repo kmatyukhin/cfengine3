@@ -384,7 +384,7 @@ bundle agent mail_server_setup
       "main_cf[myhostname]"            string => "localhost";
       "main_cf[mydestination]"         string => "localhost.localdomain, localhost";
       "main_cf[virtual_alias_domains]" string => "netrino.ru";
-      "main_cf[virtual_alias_maps]"    string => "hash:/etc/postfix/virtual"
+      "main_cf[virtual_alias_maps]"    string => "hash:/etc/postfix/virtual";
 
       "main_cf[smtpd_tls_security_level]" string => "may";
       "main_cf[smtpd_tls_auth_only]"      string => "yes";
