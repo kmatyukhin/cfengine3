@@ -428,7 +428,7 @@ bundle agent mail_server_setup
         classes => if_repaired("postfix_reload");
       "/etc/postfix/master.cf"
         create => "false",
-        edit_line => append_after_line("smtp\s+.*", $(smtp_process_options)),
+        edit_line => append_after_line("smtp\s+inet\s+.*", $(smtp_process_options)),
         classes => if_repaired("postfix_reload");
 
   commands:
