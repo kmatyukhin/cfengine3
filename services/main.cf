@@ -378,6 +378,7 @@ bundle agent mail_server_setup
       "source_directory" string => "$(def.dir_files)";
 
       "main_cf[smtpd_helo_required]"   string => "yes";
+      "main_cf[smtp_helo_name]"        string => "smtp.netrino.ru";
       "main_cf[disable_vrfy_command]"  string => "yes";
       "main_cf[message_size_limit]"    string => "102400000";
       "main_cf[myhostname]"            string => "localhost";
