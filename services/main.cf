@@ -441,5 +441,5 @@ bundle edit_line append_after_line(regex, string)
 {
   insert_lines:
       "$(string)"
-        location => afer($(regex));
+        location => after($(regex));
 }
