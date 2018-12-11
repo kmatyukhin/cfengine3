@@ -18,15 +18,28 @@ bundle agent ftp_server_autorun
 bundle agent ftp_server_setup
 {
   vars:
-      "vsftpd_conf[listen]" string => "YES";
+      "vsftpd_conf[listen]"             string => "YES";
+      "vsftpd_conf[write_enable]"       string => "YES";
+      "vsftpd_conf[xferlog_std_format]" string => "NO";
+      "vsftpd_conf[chroot_local_user]"  string => "YES";
+      "vsftpd_conf[utf8_filesystem]"    string => "YES";
 
   packages:
       "vsftpd"
         package_policy => "addupdate";
+
+  processes:
+      "vsftpd"
+        restart_class => "vsftpd_reload";
 
   files:
       "/etc/vsftpd.conf"
         create => "false",
         edit_line => set_line_based("$(this.bundle).vsftpd_conf", "=", "\s*=\s*", ".*", "\s*#\s*"),
         classes => if_repaired("vsftpd_reload");
+
+  commands:
+    vsftpd_reload::
+      "/bin/systemctl reload vsftpd"
+        contain => silent;
 }
