@@ -37,6 +37,12 @@ bundle agent ftp_server_setup
         create => "false",
         edit_line => set_line_based("$(this.bundle).vsftpd_conf", "=", "\s*=\s*", ".*", "\s*#\s*"),
         classes => if_repaired("vsftpd_reload");
+      "/var/list/."
+        create => "true",
+        perms => mog("500", "list", "list");
+      "/var/list/upload/."
+        create => "true",
+        perms => mog("700", "list", "list");
 
   commands:
     vsftpd_reload::
