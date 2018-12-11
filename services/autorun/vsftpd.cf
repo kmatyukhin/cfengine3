@@ -1,0 +1,15 @@
+bundle common vsftpd
+{
+  vars:
+      "ftp_servers" slist  => { 'netrino' };
+}
+
+bundle agent vsftpd_autorun
+{
+  meta:
+      "tags" slist => { "autorun" };
+
+  packages:
+      "vsftpd"
+        package_policy => "addupdate";
+}
