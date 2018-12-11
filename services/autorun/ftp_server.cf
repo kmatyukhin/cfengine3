@@ -27,6 +27,6 @@ bundle agent ftp_server_setup
   files:
       "/etc/vsftpd.conf"
         create => "false",
-        edit_line => set_line_based("$(vsftpd_conf)", "=", "\s*=\s*", ".*", "\s*#\s*"),
+        edit_line => set_line_based("$(this.bundle).vsftpd_conf", "=", "\s*=\s*", ".*", "\s*#\s*"),
         classes => if_repaired("vsftpd_reload");
 }
