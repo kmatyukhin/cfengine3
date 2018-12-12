@@ -60,6 +60,7 @@ bundle agent borgbackup_client
 
       "pkgs" slist => {
         "python3-setuptools",
+        "python3-wheel",
         "python3-pip",
         "borgbackup",
       };
