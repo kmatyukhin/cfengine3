@@ -59,6 +59,7 @@ bundle agent borgbackup_client
       "source_directory" string => "$(def.dir_files)";
 
       "pkgs" slist => {
+        "python3-setuptools",
         "python3-pip",
         "borgbackup",
       };
