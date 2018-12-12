@@ -79,7 +79,8 @@ bundle agent borgbackup_client
       "/etc/borgmatic/config.yaml"
         copy_from => remote_cp("$(source_directory)/$(borgbackup.clients)/borgmatic/config.yaml", "$(source_server)"),
         edit_defaults => std_defs,
-        perms => m("600");
+        perms => m("600"),
+        ifvarclass => "$(borgbackup.clients)";
 
   commands:
     python3_installed.!borgmatic_installed::
