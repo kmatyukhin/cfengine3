@@ -2,7 +2,7 @@ bundle common borgbackup
 {
   vars:
       "servers" slist  => { 'raspberrypi' };
-      "clients" slist  => { 'air', 'provenza' };
+      "clients" slist  => { 'air', 'provenza', 'netrino' };
 }
 
 bundle agent borgbackup_autorun
@@ -58,11 +58,31 @@ bundle agent borgbackup_client
       "source_server"    string => "$(sys.policy_hub)";
       "source_directory" string => "$(def.dir_files)";
 
+      "pkgs" slist => {
+        "python3-pip",
+        "borgbackup",
+      };
+
+  classes:
+      "borgmatic_installed"
+        if => fileexists("/usr/local/bin/borgmatic");
+
+  packages:
+      "$(pkgs)"
+        package_policy => "addupdate",
+        classes => if_ok("python3_installed");
+
   files:
+    borgmatic_installed::
       "/etc/borgmatic/config.yaml"
         copy_from => remote_cp("$(source_directory)/$(borgbackup.clients)/borgmatic/config.yaml", "$(source_server)"),
         edit_defaults => std_defs,
         perms => m("600");
+
+  commands:
+    python3_installed.!borgmatic_installed::
+      "/usr/bin/pip3"
+        args => "install borgmatic";
 }
 
 bundle agent borgbackup_home_dir(user)
