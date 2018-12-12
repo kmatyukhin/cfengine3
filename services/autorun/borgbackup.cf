@@ -68,6 +68,8 @@ bundle agent borgbackup_client
   classes:
       "borgmatic_installed"
         if => fileexists("/usr/local/bin/borgmatic");
+      "borg_passphrase_generated"
+        if => fileexists("/etc/borgmatic/.borg-passphrase");
 
   packages:
       "$(pkgs)"
@@ -86,6 +88,9 @@ bundle agent borgbackup_client
     python3_installed.!borgmatic_installed::
       "/usr/bin/pip3"
         args => "install borgmatic";
+    borgmatic_installed.!borg_passphrase_generated::
+      "head -c 1024 /dev/urandom | base64 > /etc/borgmatic/.borg-passphrase"
+        contain => in_shell;
 }
 
 bundle agent borgbackup_home_dir(user)
