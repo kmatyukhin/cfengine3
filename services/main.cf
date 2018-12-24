@@ -12,6 +12,7 @@ bundle agent main
       "samba_server" or => { "raspberrypi" };
       "dns_server"   or => { "raspberrypi" };
       "mail_server"  or => { "netrino" };
+      "vpn_server"   or => { "netrino" };
 
   services:
       "ssh" service_policy => "start";
@@ -30,6 +31,8 @@ bundle agent main
       "dns_server"  usebundle => dns_server_setup;
     mail_server::
       "mail_server" usebundle => mail_server_setup;
+    vpn_server::
+      "vpn_server"  usebundle => vpn_server_setup;
     raspberrypi::
       "eth0_alias"  usebundle => eth0_alias;
       "ipv6"        usebundle => enable_ipv6;
@@ -442,4 +445,11 @@ bundle edit_line append_after_line(regex, string)
   insert_lines:
       "$(string)"
         location => after($(regex));
+}
+
+bundle agent vpn_server_setup
+{
+  packages:
+      "openvpn"
+        package_policy => "addupdate";
 }
