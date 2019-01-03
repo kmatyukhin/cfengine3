@@ -373,6 +373,7 @@ bundle agent mail_server_setup
         "postfix",
         "spamassassin",
         "spamc",
+        "dovecot-imapd",
       };
 
       "maps" slist => { "access", "virtual" };
