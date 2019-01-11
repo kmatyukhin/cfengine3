@@ -118,6 +118,9 @@ bundle agent additional_packages
     any::
       "$(pkgs)"
         package_policy => "addupdate";
+    raspberrypi::
+      "easy-rsa"
+        package_policy => "addupdate";
 }
 
 bundle agent edit_sysctl
