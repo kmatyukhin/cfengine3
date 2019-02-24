@@ -1,7 +1,7 @@
-bundle common ipip6_tunnel_common
+bundle common ipip6_tunnel
 {
   vars:
-      "ipip6_tunnel" data => parsejson('{
+      "config" data => parsejson('{
         "server": {
           "class": "netrino",
           "ip6": "2a01:7e01::f03c:91ff:fe68:a882",
@@ -21,27 +21,25 @@ bundle agent ipip6_tunnel_autorun
       "tags" slist => { "autorun" };
 
   methods:
-    raspberrypi::
+    "$(ipip6_tunnel.config[client][class])"::
       "client"
         usebundle => ipip6_tunnel_client;
+    "$(ipip6_tunnel.config[server][class])"::
+      "server"
+        usebundle => ipip6_tunnel_server;
 }
 
 bundle agent ipip6_tunnel_client
 {
   commands:
       "/bin/ping -c1 -w1"
-        args => "10.0.3.1",
+        args => "$(ipip6_tunnel.config[server][ip4])",
         contain => silent,
         classes => ipip6_tunnel_class;
 
   reports:
     ipip6_tunnel_up::
-      "ipip6 tunnel is up $(ipip6_tunnel[client])";
-}
-
-body classes ipip6_tunnel_class
-{
-  promise_repaired => { "ipip6_tunnel_up" };
+      "ipip6 tunnel is up";
 }
 
 bundle agent ipip6_tunnel_server
@@ -53,7 +51,12 @@ bundle agent ipip6_tunnel_server
   commands:
     !ipip6_tunnel_configured::
       "/sbin/ip -6 tun add sit1 mode ipip6"
-        arglist => { "local $(ipip6_tunnel[server][ip6])",
-                     "remote $(ipip6_tunnel[client][ip6])" },
+        arglist => { "local $(ipip6_tunnel.config[server][ip6])",
+                     "remote $(ipip6_tunnel.config[client][ip6])" },
         contain => silent;
+}
+
+body classes ipip6_tunnel_class
+{
+  promise_repaired => { "ipip6_tunnel_up" };
 }
