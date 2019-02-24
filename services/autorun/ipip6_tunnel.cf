@@ -9,7 +9,7 @@ bundle common ipip6_tunnel
         },
         "client": {
           "class": "raspberrypi",
-          "ip6": "2a01:c50e:3620:8300:33a5:828b:bad7:31c",
+          "ip6": "2a01:c50e:3620:8300:f0c3:911b:eb80:f452",
           "ip4": "10.0.3.2",
           "subnet": "192.168.133.0/24"
         }
