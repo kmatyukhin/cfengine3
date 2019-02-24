@@ -52,7 +52,7 @@ bundle agent ipip6_tunnel_server
   commands:
     !ipip6_tunnel_configured::
       "/sbin/ip -6 tunnel add"
-        arglist => { "sit1 mode ipip6"
+        arglist => { "sit1 mode ipip6",
                      "local $(ipip6_tunnel.config[server][ip6])",
                      "remote $(ipip6_tunnel.config[client][ip6])" },
         contain => silent;
