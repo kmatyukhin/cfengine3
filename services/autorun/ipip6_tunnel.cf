@@ -62,7 +62,7 @@ bundle agent ipip6_tunnel_server
                      "dev sit1" },
         contain => silent;
       "/sbin/ip link set"
-        args    => { "sit1 up" },
+        args    =>   "sit1 up",
         contain => silent;
       "/sbin/ip route add"
         arglist => { "$(ipip6_tunnel.config[client][subnet])",
