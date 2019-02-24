@@ -10,7 +10,8 @@ bundle common ipip6_tunnel
         "client": {
           "class": "raspberrypi",
           "ip6": "2a01:c50e:3620:8300:33a5:828b:bad7:31c",
-          "ip4": "10.0.3.2"
+          "ip4": "10.0.3.2",
+          "subnet": "192.168.133.0/24"
         }
       }');
 }
@@ -46,13 +47,27 @@ bundle agent ipip6_tunnel_server
 {
   classes:
       "ipip6_tunnel_configured"
-        expression => returnszero("/sbin/ip -6 tun list sit1", "noshell");
+        expression => returnszero("/sbin/ip -6 tunnel list sit1", "noshell");
 
   commands:
     !ipip6_tunnel_configured::
-      "/sbin/ip -6 tun add sit1 mode ipip6"
-        arglist => { "local $(ipip6_tunnel.config[server][ip6])",
+      "/sbin/ip -6 tunnel add"
+        arglist => { "sit1 mode ipip6"
+                     "local $(ipip6_tunnel.config[server][ip6])",
                      "remote $(ipip6_tunnel.config[client][ip6])" },
+        contain => silent;
+      "/sbin/ip address add"
+        arglist => { "$(ipip6_tunnel.config[server][ip4])",
+                     "peer $(ipip6_tunnel.config[client][ip4])",
+                     "dev sit1" },
+        contain => silent;
+      "/sbin/ip link set"
+        args    => { "sit1 up" },
+        contain => silent;
+      "/sbin/ip route add"
+        arglist => { "$(ipip6_tunnel.config[client][subnet])",
+                     "via $(ipip6_tunnel.config[client][ip4])",
+                     "dev sit1" },
         contain => silent;
 }
 
