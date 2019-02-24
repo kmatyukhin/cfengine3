@@ -13,10 +13,6 @@ bundle common ipip6_tunnel_common
           "ip4": "10.0.3.2"
         }
       }');
-      "server_ip6" string => '2a05:d018:76d:a000:ac79:21c4:f54b:592b';
-      "client_ip6" string => '2a01:c50e:3620:8300:33a5:828b:bad7:31c';
-      "server_ip4" string => '10.0.3.1';
-      "client_ip4" string => '10.0.3.2';
 }
 
 bundle agent ipip6_tunnel_autorun
@@ -25,7 +21,7 @@ bundle agent ipip6_tunnel_autorun
       "tags" slist => { "autorun" };
 
   methods:
-    "$(ipip6_tunnel['client']['class'])"::
+    "$(ipip6_tunnel[client][class])"::
       "client"
         usebundle => ipip6_tunnel_client;
 }
@@ -34,7 +30,7 @@ bundle agent ipip6_tunnel_client
 {
   commands:
       "/bin/ping -c1 -w1"
-        args => "$(ipip6_tunnel['server']['ip4'])",
+        args => "$(ipip6_tunnel[server][ip4])",
         contain => silent,
         classes => ipip6_tunnel_class;
 
@@ -46,4 +42,18 @@ bundle agent ipip6_tunnel_client
 body classes ipip6_tunnel_class
 {
   promise_repaired => { "ipip6_tunnel_up" };
+}
+
+bundle agent ipip6_tunnel_server
+{
+  classes:
+      "ipip6_tunnel_configured"
+        expression => returnszero("/sbin/ip -6 tun list sit1", "noshell");
+
+  commands:
+    !ipip6_tunnel_configured::
+      "/sbin/ip -6 tun add sit1 mode ipip6"
+        arglist => { "local $(ipip6_tunnel[server][ip6])",
+                     "remote $(ipip6_tunnel[client][ip6])" },
+        contain => silent;
 }
