@@ -21,7 +21,7 @@ bundle agent ipip6_tunnel_autorun
       "tags" slist => { "autorun" };
 
   methods:
-    "$(ipip6_tunnel[client][class])"::
+    raspberrypi::
       "client"
         usebundle => ipip6_tunnel_client;
 }
@@ -36,7 +36,7 @@ bundle agent ipip6_tunnel_client
 
   reports:
     ipip6_tunnel_up::
-      "ipip6 tunnel is up";
+      "ipip6 tunnel is up $(ipip6_tunnel[client][class])";
 }
 
 body classes ipip6_tunnel_class
