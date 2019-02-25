@@ -123,6 +123,7 @@ bundle common def
                    # COMMENT THE NEXT LINE OUT AFTER ALL MACHINES HAVE BEEN BOOTSTRAPPED.
                    #"0.0.0.0/0", # allow any IP
                    #"2a01:7e01::f03c:91ff:fe68:a882",
+                   "216.172.65.242",
         },
         comment => "Define from which machines keys can be trusted",
         ifvarclass => and(not(isvariable("override_data_trustkeysfrom")),
