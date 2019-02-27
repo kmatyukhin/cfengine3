@@ -141,7 +141,10 @@ bundle agent minidlna_setup
   vars:
        "minidlna_conf[inotify]" string => "yes";
        "minidlna_conf[force_sort_criteria]" string => "+dc:title";
-       "minidlna_conf[media_dir]" string => "V,/media/EXTDISK/Videos";
+       "media_dirs" slist => {
+         "V,/media/EXTDISK/Videos",
+         "A,/media/EXTDISK/Music"
+       };
 
   files:
     minidlna_installed::
@@ -149,6 +152,10 @@ bundle agent minidlna_setup
         create => "false",
         edit_defaults => no_backup,
         edit_line => set_line_based("$(this.bundle).minidlna_conf", "=", "\s*=\s*", ".*", "\s*#\s*");
+      "/etc/minidlna.conf"
+        create => "false",
+        edit_defaults => no_backup,
+        edit_line => insert_lines("media_dir=$(media_dirs)");
 
   packages:
       "minidlna"
