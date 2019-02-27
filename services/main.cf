@@ -151,16 +151,27 @@ bundle agent minidlna_setup
       "/etc/minidlna.conf"
         create => "false",
         edit_defaults => no_backup,
-        edit_line => set_line_based("$(this.bundle).minidlna_conf", "=", "\s*=\s*", ".*", "\s*#\s*");
+        edit_line => set_line_based("$(this.bundle).minidlna_conf", "=", "\s*=\s*", ".*", "\s*#\s*"),
+        classes => if_repaired("minidlna_restart");
       "/etc/minidlna.conf"
         create => "false",
         edit_defaults => no_backup,
-        edit_line => insert_lines("media_dir=$(media_dirs)");
+        edit_line => insert_lines("media_dir=$(media_dirs)"),
+        classes => if_repaired("minidlna_restart");
 
   packages:
       "minidlna"
         package_policy => "addupdate",
         classes => if_ok("minidlna_installed");
+
+  processes:
+      "minidlna"
+        restart_class => "minidlna_restart";
+
+  commands:
+    minidlna_restart::
+      "/bin/systemctl restart minidlna"
+        contain => in_shell_and_silent;
 }
 
 bundle agent eth0_alias
