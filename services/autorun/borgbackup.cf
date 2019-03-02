@@ -30,6 +30,14 @@ bundle agent borgbackup_server
       "source_directory" string => "$(def.dir_files)";
       "user"             string => "borg";
 
+  users:
+      "$(user)"
+        policy => "present",
+        description => "BorgBackup User",
+        shell => "/bin/bash",
+        home_bundle => borgbackup_home_dir("$(this.promiser)"),
+        classes => if_ok("borg_user_present");
+
   files:
     borg_user_present::
       "/home/$(user)/.ssh/$(borgbackup.clients)_borgbackup.pub"
@@ -42,14 +50,6 @@ bundle agent borgbackup_server
         edit_line => insert_file_if_no_line_matching("$(user)", "$(source_directory)/$(borgbackup.servers)/borgbackup/$(borgbackup.clients)_borgbackup.pub"),
         perms => mog("600", "$(user)", "$(user)"),
         action => if_elapsed("60");
-
-  users:
-      "$(user)"
-        policy => "present",
-        description => "BorgBackup User",
-        shell => "/bin/bash",
-        home_bundle => borgbackup_home_dir("$(this.promiser)"),
-        classes => if_ok("borg_user_present");
 }
 
 bundle agent borgbackup_client
@@ -71,11 +71,6 @@ bundle agent borgbackup_client
       "borg_passphrase_generated"
         if => fileexists("/etc/borgmatic/.borg-passphrase");
 
-  packages:
-      "$(pkgs)"
-        package_policy => "addupdate",
-        classes => if_ok("python3_installed");
-
   files:
     borgmatic_installed::
       "/etc/borgmatic/config.yaml"
@@ -83,6 +78,11 @@ bundle agent borgbackup_client
         edit_defaults => std_defs,
         perms => m("600"),
         ifvarclass => "$(borgbackup.clients)";
+
+  packages:
+      "$(pkgs)"
+        package_policy => "addupdate",
+        classes => if_ok("python3_installed");
 
   commands:
     python3_installed.!borgmatic_installed::

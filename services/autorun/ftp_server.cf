@@ -24,14 +24,6 @@ bundle agent ftp_server_setup
       "vsftpd_conf[chroot_local_user]"  string => "YES";
       "vsftpd_conf[utf8_filesystem]"    string => "YES";
 
-  packages:
-      "vsftpd"
-        package_policy => "addupdate";
-
-  processes:
-      "vsftpd"
-        restart_class => "vsftpd_reload";
-
   files:
       "/etc/vsftpd.conf"
         create => "false",
@@ -43,6 +35,14 @@ bundle agent ftp_server_setup
       "/var/list/upload/."
         create => "true",
         perms => mog("700", "list", "list");
+
+  packages:
+      "vsftpd"
+        package_policy => "addupdate";
+
+  processes:
+      "vsftpd"
+        restart_class => "vsftpd_reload";
 
   commands:
     vsftpd_reload::
