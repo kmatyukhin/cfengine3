@@ -14,6 +14,10 @@ bundle common ipip6_tunnel
           "subnet": "192.168.133.0/24"
         }
       }');
+
+  classes:
+      "ipip6_tunnel_configured"
+        expression => returnszero("/sbin/ip -6 tunnel list sit1", "noshell");
 }
 
 bundle agent ipip6_tunnel_autorun
@@ -38,6 +42,31 @@ bundle agent ipip6_tunnel_client
         contain => silent,
         classes => ipip6_tunnel_class;
 
+    !ipip6_tunnel_configured::
+      "/sbin/ip -6 tunnel add"
+        arglist => { "sit1 mode ipip6",
+                     "local $(ipip6_tunnel.config[client][ip6])",
+                     "remote $(ipip6_tunnel.config[server][ip6])" },
+        contain => silent;
+      "/sbin/ip address add"
+        arglist => { "$(ipip6_tunnel.config[client][ip4])",
+                     "peer $(ipip6_tunnel.config[server][ip4])",
+                     "dev sit1" },
+        contain => silent;
+      "/sbin/ip link set"
+        args    => "sit1 up",
+        contain => silent;
+      "/sbin/ip route add"
+        arglist => { "default",
+                     "via $(ipip6_tunnel.config[server][ip4])",
+                     "dev sit1",
+                     "src 192.168.133.1" },
+        contain => silent;
+      "/sbin/ip route del"
+        arglist => { "default",
+                     "via 192.168.1.1" },
+        contain => silent;
+
   reports:
     !ipip6_tunnel_up::
       "ipip6 tunnel is down";
@@ -45,10 +74,6 @@ bundle agent ipip6_tunnel_client
 
 bundle agent ipip6_tunnel_server
 {
-  classes:
-      "ipip6_tunnel_configured"
-        expression => returnszero("/sbin/ip -6 tunnel list sit1", "noshell");
-
   commands:
     !ipip6_tunnel_configured::
       "/sbin/ip -6 tunnel add"
