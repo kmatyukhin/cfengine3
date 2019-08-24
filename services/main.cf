@@ -304,6 +304,7 @@ bundle agent samba_setup
             "read only": "yes",
             "write list": "pi",
             "create mask": "0755"
+            "mangled names": "no"
           },
           "video": {
             "path": "/media/EXTDISK/Videos",
@@ -312,6 +313,7 @@ bundle agent samba_setup
             "read only": "yes",
             "write list": "pi",
             "create mask": "0755"
+            "mangled names": "no"
           }
         }
       }');
