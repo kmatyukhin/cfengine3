@@ -298,7 +298,7 @@ bundle agent samba_setup
       "shares" data => parsejson('{
         "raspberrypi": {
           "music": {
-            "path": "/media/EXTDISK/Music",
+            "path": "/media/pi/EXTDISK/Music",
             "browsable": "yes",
             "guest ok": "yes",
             "read only": "yes",
@@ -307,7 +307,7 @@ bundle agent samba_setup
             "mangled names": "no"
           },
           "video": {
-            "path": "/media/EXTDISK/Videos",
+            "path": "/media/pi/EXTDISK/Videos",
             "browsable": "yes",
             "guest ok": "yes",
             "read only": "yes",
