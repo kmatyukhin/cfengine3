@@ -18,7 +18,7 @@ branches:
 
 install:
   - wget https://cfengine-package-repos.s3.amazonaws.com/community_binaries/Community-${CFENGINE3_VERSION%-*}/agent_debian7_x86_64/cfengine-community_${CFENGINE3_VERSION}_amd64-debian7.deb
-  - sudo dpkg -i cfengine-community_${CFENGINE3_VERSION}_amd64.deb
+  - sudo dpkg -i cfengine-community_${CFENGINE3_VERSION}_amd64-debian7.deb
 
 script: /var/cfengine/bin/cf-promises --full-check --file ./promises.cf
 
