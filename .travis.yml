@@ -5,7 +5,7 @@ os:
 
 env:
   matrix:
-    - CFENGINE3_VERSION=3.9.2-1
+    - CFENGINE3_VERSION=3.12.2-2
   global:
     secure: h1T0JruAVERfPQPjf+0yMJBWZxUX23p5dHKBuWYE2OMEpyu+CNoY9jaiqeWAV9ioss8+GSaS3CINtLNdXbSlNHCSx1aQcSXmwX5UAjJocbfS6qp4zzQj6UcwWG/HpiVIoyz45gdW0DN7vfXBDExvWswqLAsn/7O+C3SFYNntHYCHZ5PAX/Lrb728E+ysmwUlZsNCXQQxyK1WVO6kbCPAg3tY87XtejkUGFs6OKLqZq75k40fLYTNgPaf/i0TAbgPnfna80S022xfr9fb9x6lcrtBOWGJl0ojtWr6/QeR/0/zT2IE7R12luJQBN41DgWioqXosBifXD8k5l2XOL4LNA7ooKaa/UMy06HsSwUkIeQozfnA3Nm+F1TIinMyCQJC5SsnSejl36mKcnY8JmVVv1giwZu/FXWeonvgoUKhwYHTdxt6ip/vLLi8pIieLwsqqi+mD863vGo6UMzl0kKcxKS9/0fdx/bfxzVLp4v/2csDotZU0w4AhgXIjTwG5/wwxnNAgsU0c+ojQj/UdaN0jpd0u7ykDljZ9JorWx4UGdva1EgDOvuH/DpustccY82dzyyGSh5TLurksZ7Syj2THDpk6rO+qtTEfZam4jy5VcQYg2yi9fn/fFVbsfItpsd1yDJgFxZtQluC1RsxkxR4NDbS/dPXm1KEY//9+xFeNn4=
 
@@ -17,7 +17,7 @@ branches:
     - develop
 
 install:
-  - wget https://cfengine-package-repos.s3.amazonaws.com/community_binaries/cfengine-community_${CFENGINE3_VERSION}_amd64.deb
+  - wget https://cfengine-package-repos.s3.amazonaws.com/community_binaries/Community-${CFENGINE3_VERSION%-*}/agent_debian7_x86_64/cfengine-community_${CFENGINE3_VERSION}_amd64-debian7.deb
   - sudo dpkg -i cfengine-community_${CFENGINE3_VERSION}_amd64.deb
 
 script: /var/cfengine/bin/cf-promises --full-check --file ./promises.cf
