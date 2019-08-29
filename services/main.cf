@@ -142,8 +142,8 @@ bundle agent minidlna_setup
        "minidlna_conf[inotify]" string => "yes";
        "minidlna_conf[force_sort_criteria]" string => "+dc:title";
        "media_dirs" slist => {
-         "V,/media/EXTDISK/Videos",
-         "A,/media/EXTDISK/Music"
+         "V,/media/pi/EXTDISK/Videos",
+         "A,/media/pi/EXTDISK/Music"
        };
 
   files:
