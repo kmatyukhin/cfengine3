@@ -142,8 +142,8 @@ bundle agent minidlna_setup
        "minidlna_conf[inotify]" string => "yes";
        "minidlna_conf[force_sort_criteria]" string => "+dc:title";
        "media_dirs" slist => {
-         "V,/media/pi/EXTDISK/Videos",
-         "A,/media/pi/EXTDISK/Music"
+         "V,/media/EXTDISK/Videos",
+         "A,/media/EXTDISK/Music"
        };
 
   files:
@@ -298,7 +298,7 @@ bundle agent samba_setup
       "shares" data => parsejson('{
         "raspberrypi": {
           "music": {
-            "path": "/media/pi/EXTDISK/Music",
+            "path": "/media/EXTDISK/Music",
             "browsable": "yes",
             "guest ok": "yes",
             "read only": "yes",
@@ -307,7 +307,7 @@ bundle agent samba_setup
             "mangled names": "no"
           },
           "video": {
-            "path": "/media/pi/EXTDISK/Videos",
+            "path": "/media/EXTDISK/Videos",
             "browsable": "yes",
             "guest ok": "yes",
             "read only": "yes",
