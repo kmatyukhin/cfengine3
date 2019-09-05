@@ -36,9 +36,9 @@ bundle agent ftp_server_setup
         create => "true",
         perms => mog("700", "list", "list");
 
-  packages:
-      "vsftpd"
-        package_policy => "addupdate";
+  #packages:
+  #    "vsftpd"
+  #      package_policy => "addupdate";
 
   processes:
       "vsftpd"
