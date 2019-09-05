@@ -10,15 +10,9 @@ bundle agent ftp_server_autorun
       "tags" slist => { "autorun" };
 
   methods:
-    ftp_server::
-      "server"
-        usebundle => ftp_server_setup;
-
-  reports:
-    !ftp_server::
-      "--- Not ftp server";
-    ftp_server::
-      "--- ftp server";
+      "ftp_server"
+        usebundle => ftp_server_setup,
+        ifvarclass => "$(ftp_server.ftp_server)";
 }
 
 bundle agent ftp_server_setup
