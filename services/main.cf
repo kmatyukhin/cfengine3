@@ -10,6 +10,7 @@ bundle agent main
 {
   classes:
       "samba_server" or => { "raspberrypi" };
+      "dhcp_server"  or => { "raspberrypi" };
       "dns_server"   or => { "raspberrypi" };
       "mail_server"  or => { "netrino" };
       "vpn_server"   or => { "netrino" };
@@ -24,6 +25,8 @@ bundle agent main
       "vcs_update"  usebundle => vcs_update;
     samba_server::
       "samba"       usebundle => samba_setup;
+    dhcp_server::
+      "dhcp_server" usebundle => dhcp_server_setup;
     dns_server::
       "dns_server"  usebundle => dns_server_setup;
     mail_server::
@@ -489,5 +492,12 @@ bundle agent vpn_server_setup
 {
   packages:
       "openvpn"
+        package_policy => "addupdate";
+}
+
+bundle agent dhcp_server_setup
+{
+  packages:
+      "dnsmasq"
         package_policy => "addupdate";
 }
