@@ -498,7 +498,8 @@ bundle agent vpn_server_setup
 bundle agent dhcp_server_setup
 {
   vars:
-      "dnsmasq_conf[port]" string => "0";
+      "dnsmasq_conf[port]"      string => "0";
+      "dnsmasq_conf[interface]" string => "eth1";
 
   files:
     dnsmasq_installed::
