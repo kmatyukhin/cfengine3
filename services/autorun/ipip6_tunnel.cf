@@ -22,8 +22,8 @@ bundle common ipip6_tunnel
 
 bundle agent ipip6_tunnel_autorun
 {
-  meta:
-      "tags" slist => { "autorun" };
+  #meta:
+  #    "tags" slist => { "autorun" };
 
   methods:
     "$(ipip6_tunnel.config[client][class])"::
