@@ -497,7 +497,28 @@ bundle agent vpn_server_setup
 
 bundle agent dhcp_server_setup
 {
+  vars:
+      "dnsmasq_conf[port]" string => "0";
+
+  files:
+    dnsmasq_installed::
+      "/etc/dnsmasq.conf"
+        create => "false",
+        edit_defaults => no_backup,
+        edit_line => set_line_based("$(this.bundle).dnsmasq_conf", "=", "\s*=\s*", ".*", "\s*#\s*"),
+        classes => if_repaired("dnsmasq_restart");
+
   packages:
       "dnsmasq"
-        package_policy => "addupdate";
+        package_policy => "addupdate",
+        classes => if_ok("dnsmasq_installed");
+
+  processes:
+      "dnsmasq"
+        restart_class => "dnsmasq_restart";
+
+  commands:
+    dnsmasq_restart::
+      "/bin/systemctl restart dnsmasq"
+        contain => in_shell_and_silent;
 }
