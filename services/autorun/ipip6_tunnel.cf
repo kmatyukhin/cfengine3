@@ -9,7 +9,7 @@ bundle common ipip6_tunnel
         },
         "client": {
           "class": "raspberrypi",
-          "ip6": "2a01:c50e:3620:8300:380a:25d4:bfee:3f7",
+          "ip6": "2a01:c50f:ac45:7800:8d96:bf8:d985:942e",
           "ip4": "10.0.3.2",
           "subnet": "192.168.133.0/24"
         }
@@ -22,8 +22,8 @@ bundle common ipip6_tunnel
 
 bundle agent ipip6_tunnel_autorun
 {
-  #meta:
-  #    "tags" slist => { "autorun" };
+  meta:
+      "tags" slist => { "autorun" };
 
   methods:
     "$(ipip6_tunnel.config[client][class])"::
