@@ -59,15 +59,11 @@ bundle agent borgbackup_client
       "source_directory" string => "$(def.dir_files)";
 
       "pkgs" slist => {
-        "python3-setuptools",
-        "python3-wheel",
-        "python3-pip",
         "borgbackup",
+        "borgmatic",
       };
 
   classes:
-      "borgmatic_installed"
-        if => fileexists("/usr/local/bin/borgmatic");
       "borg_passphrase_generated"
         if => fileexists("/etc/borgmatic/.borg-passphrase");
 
@@ -82,12 +78,9 @@ bundle agent borgbackup_client
   packages:
       "$(pkgs)"
         package_policy => "addupdate",
-        classes => if_ok("python3_installed");
+        classes => if_ok("borgmatic_installed");
 
   commands:
-    python3_installed.!borgmatic_installed::
-      "/usr/bin/pip3"
-        args => "install borgmatic";
     borgmatic_installed.!borg_passphrase_generated::
       "head -c 1024 /dev/urandom | base64 > /etc/borgmatic/.borg-passphrase"
         contain => in_shell;
