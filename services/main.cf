@@ -400,6 +400,7 @@ bundle agent mail_server_setup
         "spamassassin",
         "spamc",
         "dovecot-imapd",
+        "dovecot-managesieved",
       };
 
       "maps" slist => { "access", "virtual" };
