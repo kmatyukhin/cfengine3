@@ -427,6 +427,8 @@ bundle agent mail_server_setup
       "dovecot_ssl_conf[ssl_cert]" string => "</etc/ssl/certs/ssl-cert-snakeoil.pem";
       "dovecot_ssl_conf[ssl_key]"  string => "</etc/ssl/private/ssl-cert-snakeoil.key";
 
+      "dovecot_lda_conf[mail_plugins]" string => "$mail_plugins sieve";
+
       "spamd_delivery_method" string => "spamassassin unix -     n       n       -       -       pipe
   flags=O user=debian-spamd argv=/usr/bin/spamc -u ${user} -f -e /usr/sbin/sendmail -oi -f ${sender} ${recipient}";
 
@@ -461,6 +463,10 @@ bundle agent mail_server_setup
       "/etc/dovecot/conf.d/10-ssl.conf"
         create => "false",
         edit_line => set_line_based("$(this.bundle).dovecot_ssl_conf", " = ", "\s*=\s*", ".*", "\s*#\s*"),
+        classes => if_repaired("dovecot_reload");
+      "/etc/dovecot/conf.d/15-lda.conf"
+        create => "false",
+        edit_line => set_line_based("$(this.bundle).dovecot_lda_conf", " = ", "\s*=\s*", ".*", "\s*#\s*"),
         classes => if_repaired("dovecot_reload");
 
   packages:
