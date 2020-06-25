@@ -486,6 +486,9 @@ bundle agent mail_server_setup
     postfix_reload::
       "/bin/systemctl reload postfix"
         contain => silent;
+    dovecot_reload::
+      "/bin/systemctl reload dovecot"
+        contain => silent;
 }
 
 bundle edit_line append_after_line(regex, string)
