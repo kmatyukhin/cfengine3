@@ -408,18 +408,18 @@ bundle agent mail_server_setup
       "source_server"    string => "$(sys.policy_hub)";
       "source_directory" string => "$(def.dir_files)";
 
-      "main_cf[smtpd_helo_required]"   string => "yes";
-      "main_cf[smtp_helo_name]"        string => "smtp.netrino.ru";
-      "main_cf[disable_vrfy_command]"  string => "yes";
-      "main_cf[message_size_limit]"    string => "102400000";
-      "main_cf[myhostname]"            string => "localhost";
-      "main_cf[mydestination]"         string => "localhost.localdomain, localhost";
-      "main_cf[mynetworks]"            string => "127.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128 216.172.65.242/32";
-      "main_cf[virtual_alias_domains]" string => "netrino.ru";
-      "main_cf[virtual_alias_maps]"    string => "hash:/etc/postfix/virtual";
-
+      "main_cf[smtpd_helo_required]"      string => "yes";
+      "main_cf[smtp_helo_name]"           string => "smtp.netrino.ru";
+      "main_cf[disable_vrfy_command]"     string => "yes";
+      "main_cf[message_size_limit]"       string => "102400000";
+      "main_cf[myhostname]"               string => "localhost";
+      "main_cf[mydestination]"            string => "localhost.localdomain, localhost";
+      "main_cf[mynetworks]"               string => "127.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128 216.172.65.242/32";
+      "main_cf[virtual_alias_domains]"    string => "netrino.ru";
+      "main_cf[virtual_alias_maps]"       string => "hash:/etc/postfix/virtual";
       "main_cf[smtpd_tls_security_level]" string => "may";
       "main_cf[smtpd_tls_auth_only]"      string => "yes";
+      "main_cf[mailbox_command]"          string => "/usr/lib/dovecot/deliver";
 
       "dovecot_mail_conf[mail_privileged_group]" string => "mail";
 
