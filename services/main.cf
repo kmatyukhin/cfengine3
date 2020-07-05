@@ -421,6 +421,7 @@ bundle agent mail_server_setup
       "main_cf[smtpd_tls_auth_only]"      string => "yes";
       "main_cf[mailbox_command]"          string => "/usr/lib/dovecot/deliver";
 
+      "dovecot_mail_conf[mail_location]"         string => "maildir:~/Mail:LAYOUT=fs";
       "dovecot_mail_conf[mail_privileged_group]" string => "mail";
 
       "dovecot_ssl_conf[ssl]"      string => "yes";
